@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AndroidAcademyApp</string>
+    <string name="position1_res">Начинающий Android разработчик</string>
+    <string name="name_res">Игорь Ручкин</string>
+    <string name="position3_res">Инженер</string>
+    <string name="position2_res">Разработчик игры на Unity</string>
+    <string name="subject">Письмо для Игоря Ручкина</string>
+    <string name="error_no_email_app">Ошибка!Не найден почтовый клиент.</string>
+    <string name="send_bt">Отправить сообщение</string>
+    <string name="message_hint">Введите сообщение…</string>
+    <string name="about_res">Игорь занимается разработкой под Android с 2018 года. Сейчас проходит курс в Android Adcademy.Так же он делает небольшую игру на Unity.</string>
+</resources>

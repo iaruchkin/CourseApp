@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/name_tw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/name_res"
+        android:textSize="@dimen/text_size"
+        android:padding="@dimen/standart_padding"
+        android:textColor="@color/colorAccent"
+        android:background="@color/colorPrimary"/>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ruchkin_portrait"
+        android:contentDescription="@string/portrait_dscr"/>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/standart_padding">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="50dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/android_icon_logo"
+            android:contentDescription="@string/work_icon_dscr"/>
+
+        <TextView
+            android:id="@+id/position_tw"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingEnd="@dimen/standart_padding"
+            android:text="@string/position1_res"
+            android:textSize="@dimen/text_size"
+            android:gravity="center_vertical"/>
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/standart_padding">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="50dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/unity_logo"
+            android:contentDescription="@string/work_icon_dscr"/>
+
+        <TextView
+            android:id="@+id/position2_tw"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingEnd="@dimen/standart_padding"
+            android:text="@string/position2_res"
+            android:textSize="@dimen/text_size"
+            android:gravity="center_vertical" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/standart_padding">
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_marginStart="50dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bmstu_logo"
+            android:contentDescription="@string/work_icon_dscr"/>
+
+        <TextView
+            android:id="@+id/position3_tw"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingEnd="@dimen/standart_padding"
+            android:text="@string/position3_res"
+            android:textSize="@dimen/text_size"
+            android:gravity="center_vertical" />
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_marginTop="@dimen/standart_padding"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="@dimen/standart_padding"
+        android:background="@color/colorStripe">
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/about_tw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/standart_padding"
+        android:paddingStart="50dp"
+        android:paddingEnd="@dimen/standart_padding"
+        android:text="@string/about_res"
+        android:textSize="@dimen/text_size" />
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="@dimen/standart_padding"
+        android:layout_marginBottom="@dimen/standart_padding"
+        android:background="@color/colorStripe">
+    </android.support.v7.widget.LinearLayoutCompat>
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/et_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="@dimen/standart_padding"
+        android:hint="@string/message_hint"
+        android:inputType="textEmailAddress" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:padding="@dimen/standart_padding"
+        android:id="@+id/b_send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="@color/colorAccent"
+        android:text="@string/send_bt"
+        android:textColor="@color/colorStripe"
+        android:textSize="@dimen/text_size"
+        android:textAllCaps="true"
+        android:clickable="true"
+        android:focusable="true">
+    </android.support.v7.widget.AppCompatTextView>
+
+    <android.support.v7.widget.LinearLayoutCompat
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/telegram_link"
+            android:padding="@dimen/standart_padding"
+            android:layout_width="@dimen/icon_link_dim"
+            android:layout_height="@dimen/icon_link_dim"
+            android:scaleType="centerCrop"
+            android:src="@drawable/telegram_messenger"
+            android:contentDescription="@string/work_icon_dscr"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/instagram_link"
+            android:padding="@dimen/standart_padding"
+            android:layout_width="@dimen/icon_link_dim"
+            android:layout_height="@dimen/icon_link_dim"
+            android:scaleType="centerCrop"
+            android:src="@drawable/instagram_icon"
+            android:contentDescription="@string/work_icon_dscr"
+            android:clickable="true"
+            android:focusable="true"/>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/vk_link"
+            android:padding="@dimen/standart_padding"
+            android:layout_width="@dimen/icon_link_dim"
+            android:layout_height="@dimen/icon_link_dim"
+            android:scaleType="centerCrop"
+            android:src="@drawable/vk_logo"
+            android:contentDescription="@string/work_icon_dscr"
+            android:clickable="true"
+            android:focusable="true"/>
+
+    </android.support.v7.widget.LinearLayoutCompat>
+
+</android.support.v7.widget.LinearLayoutCompat>

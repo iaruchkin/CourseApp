@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">AndroidAcademyApp</string>
+    <string name="about_res">Igor has been doing android development since 2018. Now he learns Android at Android Adcademy. Also creating small game on Unity engine.</string>
+    <string name="position1_res">Beginner Android Developer</string>
+    <string name="name_res">Igor Ruchkin</string>
+    <string name="portrait_dscr" translatable="false">portrait</string>
+    <string name="work_icon_dscr" translatable="false">work icon</string>
+    <string name="position3_res">Designer-engineer</string>
+    <string name="position2_res">Unity game developer</string>
+    <string name="subject">Message to Ruchkin Igor</string>
+    <string name="email_adress" translatable="false">iaruchkin@gmail.com</string>
+    <string name="error_no_email_app">Error! There is no email app!</string>
+    <string name="send_bt">send message</string>
+    <string name="message_hint">Enter a message…</string>
+    <string name="instagram_link" translatable="false">https://instagram.com/igor_ofigensky</string>
+    <string name="telegram_link" translatable="false">https://t.me/iaruchkin</string>
+    <string name="vk_link" translatable="false">https://vk.com/id1619362</string>
+</resources>
