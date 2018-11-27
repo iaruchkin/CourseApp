@@ -4,26 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/name_tw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/name_res"
-        android:textSize="@dimen/text_size"
-        android:padding="@dimen/standart_padding"
-        android:textColor="@color/colorAccent"
-        android:background="@color/colorPrimary"/>
+    tools:context=".AboutActivity">
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        tools:context=".MainActivity">
+        tools:context=".AboutActivity">
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="128dp"
+            android:layout_width="300dp"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/ruchkin_portrait"

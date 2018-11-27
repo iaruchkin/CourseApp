@@ -2,6 +2,7 @@ package iaruchkin.courseapp;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,28 +12,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity {
+public class AboutActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
-
+    private static final String TAG = "AboutActivity";
     private EditText mMessageEditText;
-    private TextView mSendButton;
-    private ImageView mTelegramLogo;
-    private ImageView mInsagramLogo;
-    private ImageView mVkLogo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+        final ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+        }
+
         super.onCreate(savedInstanceState);
         Log.i(TAG, "onCreate");
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.about_activity);
 
         mMessageEditText = findViewById(R.id.et_message);
-        mSendButton = findViewById(R.id.b_send);
-        mTelegramLogo = findViewById(R.id.telegram_link);
-        mInsagramLogo = findViewById(R.id.instagram_link);
-        mVkLogo = findViewById(R.id.vk_link);
+        TextView mSendButton = findViewById(R.id.b_send);
+        ImageView mTelegramLogo = findViewById(R.id.telegram_link);
+        ImageView mInsagramLogo = findViewById(R.id.instagram_link);
+        ImageView mVkLogo = findViewById(R.id.vk_link);
 
         mSendButton.setOnClickListener(new View.OnClickListener() {
             @Override

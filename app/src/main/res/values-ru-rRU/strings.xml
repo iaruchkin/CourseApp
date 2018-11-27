@@ -10,4 +10,5 @@
     <string name="send_bt">Отправить сообщение</string>
     <string name="message_hint">Введите сообщение…</string>
     <string name="about_res">Игорь занимается разработкой под Android с 2018 года. Сейчас проходит курс в Android Adcademy.Так же он делает небольшую игру на Unity.</string>
+    <string name="menu_action_switch">Инфо</string>
 </resources>

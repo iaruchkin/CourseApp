@@ -4,26 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
-
-    <android.support.v7.widget.AppCompatTextView
-        android:id="@+id/name_tw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/name_res"
-        android:textSize="@dimen/text_size"
-        android:padding="@dimen/standart_padding"
-        android:textColor="@color/colorAccent"
-        android:background="@color/colorPrimary"/>
+    tools:context=".AboutActivity">
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        tools:context=".MainActivity">
+        tools:context=".AboutActivity">
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="150dp"
+            android:layout_width="180dp"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/ruchkin_portrait"
@@ -34,83 +24,83 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <android.support.v7.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/standart_padding">
+            <!--<android.support.v7.widget.LinearLayoutCompat-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:paddingTop="@dimen/standart_padding">-->
 
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="50dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/android_icon_logo"
-                    android:contentDescription="@string/work_icon_dscr"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="28dp"-->
+                    <!--android:layout_height="28dp"-->
+                    <!--android:layout_marginStart="50dp"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/android_icon_logo"-->
+                    <!--android:contentDescription="@string/work_icon_dscr"/>-->
 
-                <TextView
-                    android:id="@+id/position_tw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="@dimen/standart_padding"
-                    android:text="@string/position1_res"
-                    android:textSize="@dimen/text_size"
-                    android:gravity="center_vertical"/>
+                <!--<TextView-->
+                    <!--android:id="@+id/position_tw"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:paddingStart="8dp"-->
+                    <!--android:paddingEnd="@dimen/standart_padding"-->
+                    <!--android:text="@string/position1_res"-->
+                    <!--android:textSize="@dimen/text_size"-->
+                    <!--android:gravity="center_vertical"/>-->
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            <!--</android.support.v7.widget.LinearLayoutCompat>-->
 
-            <android.support.v7.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/standart_padding">
+            <!--<android.support.v7.widget.LinearLayoutCompat-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:paddingTop="@dimen/standart_padding">-->
 
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="50dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/unity_logo"
-                    android:contentDescription="@string/work_icon_dscr"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="28dp"-->
+                    <!--android:layout_height="28dp"-->
+                    <!--android:layout_marginStart="50dp"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/unity_logo"-->
+                    <!--android:contentDescription="@string/work_icon_dscr"/>-->
 
-                <TextView
-                    android:id="@+id/position2_tw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="@dimen/standart_padding"
-                    android:text="@string/position2_res"
-                    android:textSize="@dimen/text_size"
-                    android:gravity="center_vertical" />
+                <!--<TextView-->
+                    <!--android:id="@+id/position2_tw"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:paddingStart="8dp"-->
+                    <!--android:paddingEnd="@dimen/standart_padding"-->
+                    <!--android:text="@string/position2_res"-->
+                    <!--android:textSize="@dimen/text_size"-->
+                    <!--android:gravity="center_vertical" />-->
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            <!--</android.support.v7.widget.LinearLayoutCompat>-->
 
-            <android.support.v7.widget.LinearLayoutCompat
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:paddingTop="@dimen/standart_padding">
+            <!--<android.support.v7.widget.LinearLayoutCompat-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:orientation="horizontal"-->
+                <!--android:paddingTop="@dimen/standart_padding">-->
 
-                <ImageView
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_marginStart="50dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/bmstu_logo"
-                    android:contentDescription="@string/work_icon_dscr"/>
+                <!--<ImageView-->
+                    <!--android:layout_width="28dp"-->
+                    <!--android:layout_height="28dp"-->
+                    <!--android:layout_marginStart="50dp"-->
+                    <!--android:scaleType="centerCrop"-->
+                    <!--android:src="@drawable/bmstu_logo"-->
+                    <!--android:contentDescription="@string/work_icon_dscr"/>-->
 
-                <TextView
-                    android:id="@+id/position3_tw"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="@dimen/standart_padding"
-                    android:text="@string/position3_res"
-                    android:textSize="@dimen/text_size"
-                    android:gravity="center_vertical" />
+                <!--<TextView-->
+                    <!--android:id="@+id/position3_tw"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="match_parent"-->
+                    <!--android:paddingStart="8dp"-->
+                    <!--android:paddingEnd="@dimen/standart_padding"-->
+                    <!--android:text="@string/position3_res"-->
+                    <!--android:textSize="@dimen/text_size"-->
+                    <!--android:gravity="center_vertical" />-->
 
-            </android.support.v7.widget.LinearLayoutCompat>
+            <!--</android.support.v7.widget.LinearLayoutCompat>-->
 
             <android.support.v7.widget.LinearLayoutCompat
                 android:layout_marginTop="@dimen/standart_padding"
@@ -166,7 +156,8 @@
                     android:src="@drawable/telegram_messenger"
                     android:contentDescription="@string/work_icon_dscr"
                     android:clickable="true"
-                    android:focusable="true"/>
+                    android:focusable="true"
+                    android:layout_marginStart="50dp"/>
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/instagram_link"
@@ -202,8 +193,7 @@
                     android:textSize="@dimen/text_size"
                     android:textAllCaps="true"
                     android:clickable="true"
-                    android:focusable="true"
-                    android:layout_marginStart="100dp">
+                    android:focusable="true">
                 </android.support.v7.widget.AppCompatTextView>
 
             </android.support.v7.widget.LinearLayoutCompat>

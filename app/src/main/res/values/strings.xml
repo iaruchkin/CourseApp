@@ -15,4 +15,8 @@
     <string name="instagram_link" translatable="false">https://instagram.com/igor_ofigensky</string>
     <string name="telegram_link" translatable="false">https://t.me/iaruchkin</string>
     <string name="vk_link" translatable="false">https://vk.com/id1619362</string>
+    <string name="menu_action_switch">About</string>
+    <string name="clicked" translatable="false">Item clicked!</string>
+    <string name="preview_dscr" translatable="false">item news preview image</string>
+    <string name="full_image_dscr" translatable="false">full image for article</string>
 </resources>
