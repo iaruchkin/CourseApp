@@ -1,5 +1,8 @@
 package iaruchkin.courseapp;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -11,14 +14,14 @@ import iaruchkin.courseapp.data.DataUtils;
 import iaruchkin.courseapp.data.NewsItem;
 
 public class NewsDetailsActivity extends AppCompatActivity {
+    static final String EXTRA_NEWS_ITEM = "extra:newsItem";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_details);
 
-        final int position = getIntent().getIntExtra("position",0);
-        NewsItem newsItem = DataUtils.generateNews().get(position);
+        NewsItem newsItem = (NewsItem) getIntent().getSerializableExtra(EXTRA_NEWS_ITEM);
 
         setTitle(newsItem.getCategory().getName());
 

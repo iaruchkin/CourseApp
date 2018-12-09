@@ -1,13 +1,28 @@
 package iaruchkin.courseapp.data;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import static iaruchkin.courseapp.NewsListActivity.TAG;
+
 public class DataUtils {
 
     public static List<NewsItem> generateNews() {
+
+        Log.i(TAG, "generateNews");
+        Log.i(TAG, Thread.currentThread().getName());
+        // we are adding this delay to imitate long loading process
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         final Category darwinAwards = new Category(1, "Darwin Awards");
         final Category criminal = new Category(2, "Criminal");
         final Category animals = new Category(3, "Animals");

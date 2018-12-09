@@ -1,7 +1,5 @@
 package iaruchkin.courseapp;
 
-        import android.content.Context;
-        import android.content.Intent;
         import android.support.annotation.NonNull;
         import android.support.v7.widget.RecyclerView;
         import android.view.LayoutInflater;
@@ -18,12 +16,15 @@ package iaruchkin.courseapp;
 
 
 public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsViewHolder>{
-    private final List<NewsItem> newsItemList;
-    private Context context;
+    private List<NewsItem> newsItemList;
+    private final NewsAdapterOnClickHandler mClickHandler;
 
-    public NewsItemAdapter(List<NewsItem> newsItemList, Context context) {
-        this.newsItemList = newsItemList;
-        this.context = context;
+    public interface NewsAdapterOnClickHandler {
+        void onClick(NewsItem newsItem);
+    }
+
+    public NewsItemAdapter(NewsAdapterOnClickHandler clickHandler) {
+        mClickHandler = clickHandler;
     }
 
     @NonNull
@@ -41,10 +42,11 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsVi
 
     @Override
     public int getItemCount() {
+        if (null == newsItemList) return 0;
         return newsItemList.size();
     }
 
-    public class NewsViewHolder extends RecyclerView.ViewHolder {
+    public class NewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final ImageView imageView;
         private final TextView categoryTextView;
         private final TextView titleTextView;
@@ -52,7 +54,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsVi
         private final TextView dateTextView;
 
         public void bind(NewsItem newsItem) {
-            Glide.with(context).load(newsItem.getImageUrl()).into(imageView);
+            Glide.with(itemView.getContext()).load(newsItem.getImageUrl()).into(imageView);
             categoryTextView.setText(newsItem.getCategory().getName());
             titleTextView.setText(newsItem.getTitle());
             previewTextView.setText(newsItem.getPreviewText());
@@ -67,17 +69,20 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsVi
             titleTextView = view.findViewById(R.id.item_title);
             previewTextView = view.findViewById(R.id.item_preview);
             dateTextView = view.findViewById(R.id.item_date);
+            view.setOnClickListener(this);
+        }
 
-            context = itemView.getContext();
-            view.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent intent = new Intent(context, NewsDetailsActivity.class);
-                    intent.putExtra("position",getAdapterPosition());
-                    context.startActivity(intent);
-                }
-            });
-
+        @Override
+        public void onClick(View v) {
+            int adapterPosition = getAdapterPosition();
+            NewsItem newsItem = newsItemList.get(adapterPosition);
+            mClickHandler.onClick(newsItem);
         }
     }
+
+    public void setNewsData(List<NewsItem> newsData) {
+        newsItemList = newsData;
+        notifyDataSetChanged();
+    }
+
 }
