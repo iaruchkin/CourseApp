@@ -14,7 +14,7 @@ public class DataUtils {
     public static List<NewsItem> generateNews() {
 
         Log.i(TAG, "generateNews");
-        Log.i(TAG, Thread.currentThread().getName());
+        Log.i(TAG,"News Generator executed on thread:" +  Thread.currentThread().getName());
         // we are adding this delay to imitate long loading process
 
         try {

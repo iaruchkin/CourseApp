@@ -1,14 +1,11 @@
 package iaruchkin.courseapp;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -27,14 +24,15 @@ import iaruchkin.courseapp.data.NewsItem;
 
 import static iaruchkin.courseapp.NewsDetailsActivity.EXTRA_NEWS_ITEM;
 
-public class NewsListActivity extends AppCompatActivity implements NewsItemAdapter.NewsAdapterOnClickHandler, LoaderCallbacks<List<NewsItem>> {
+public class NewsListActivity extends AppCompatActivity implements NewsItemAdapter.NewsAdapterOnClickHandler {
 
     public static final String TAG = NewsListActivity.class.getSimpleName();
 
     private NewsItemAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private ProgressBar mLoadingIndicator;
-    private static final int FORECAST_LOADER_ID = 0;
+    Thread newsThread;
+    Handler newsHandler;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,10 +55,33 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
 
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
 
-        Log.i(TAG, Thread.currentThread().getName());
+        Log.i(TAG, "OnCreate executed on thread:" + Thread.currentThread().getName());
 
-        getSupportLoaderManager().initLoader(FORECAST_LOADER_ID, null, NewsListActivity.this);
+        newsHandler = new Handler();
+        newsThread = new Thread(new Runnable() {
+            public void run() {
+                Log.i(TAG, "handler executed on thread:" + Thread.currentThread().getName());
+                mLoadingIndicator.setVisibility(View.VISIBLE);
+                final List<NewsItem> generateNewsResult = DataUtils.generateNews();
+                newsHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i(TAG, "UI executed on thread:" + Thread.currentThread().getName());
+                        mLoadingIndicator.setVisibility(View.INVISIBLE);
+                        mAdapter.setNewsData(generateNewsResult);
+                    }
+                });
+            }
+        });
 
+        newsThread.start();
+    }
+
+    @Override
+    protected void onDestroy() {
+        if(newsThread != null) newsThread.interrupt();
+        newsThread = null;
+        super.onDestroy();
     }
 
     @Override
@@ -70,50 +91,6 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
         intentToStartDetailActivity.putExtra(EXTRA_NEWS_ITEM,newsItem);
         startActivity(intentToStartDetailActivity);
-    }
-
-    @SuppressLint("StaticFieldLeak")
-    @NonNull
-    @Override
-    public Loader<List<NewsItem>> onCreateLoader(int i, @Nullable Bundle bundle) {
-        return new AsyncTaskLoader<List<NewsItem>>(this) {
-            List<NewsItem> newsItemList = null;
-            @Override
-            protected void onStartLoading() {
-                if (newsItemList != null) {
-                    deliverResult(newsItemList);
-                } else {
-                    mLoadingIndicator.setVisibility(View.VISIBLE);
-                    forceLoad();
-                }
-            }
-            @Override
-            public List<NewsItem> loadInBackground() {
-                Log.i(TAG, "loadInBackground");
-                Log.i(TAG, Thread.currentThread().getName());
-                List<NewsItem> generateNewsResult = DataUtils.generateNews();
-                return generateNewsResult;
-            }
-            public void deliverResult(List<NewsItem> data) {
-                newsItemList = data;
-                super.deliverResult(data);
-            }
-        };
-    }
-
-    @Override
-    public void onLoadFinished(@NonNull Loader<List<NewsItem>> loader, List<NewsItem> newsItemList) {
-        mLoadingIndicator.setVisibility(View.INVISIBLE);
-        mAdapter.setNewsData(newsItemList);
-        if (newsItemList != null) {
-            mRecyclerView.setVisibility(View.VISIBLE);
-            mAdapter.setNewsData(newsItemList);
-        }
-    }
-
-    @Override
-    public void onLoaderReset(@NonNull Loader<List<NewsItem>> loader) {
-
     }
 
     @Override
