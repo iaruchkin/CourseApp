@@ -21,6 +21,9 @@ import java.util.List;
 
 import iaruchkin.courseapp.data.DataUtils;
 import iaruchkin.courseapp.data.NewsItem;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static iaruchkin.courseapp.NewsDetailsActivity.EXTRA_NEWS_ITEM;
 
@@ -31,6 +34,9 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
     private NewsItemAdapter mAdapter;
     private RecyclerView mRecyclerView;
     private ProgressBar mLoadingIndicator;
+
+    @Nullable private Disposable disposable;
+
     Thread newsThread;
     Handler newsHandler;
 
@@ -57,24 +63,20 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
 
         Log.i(TAG, "OnCreate executed on thread:" + Thread.currentThread().getName());
 
-        newsHandler = new Handler();
-        newsThread = new Thread(new Runnable() {
-            public void run() {
-                Log.i(TAG, "handler executed on thread:" + Thread.currentThread().getName());
-                mLoadingIndicator.setVisibility(View.VISIBLE);
-                final List<NewsItem> generateNewsResult = DataUtils.generateNews();
-                newsHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Log.i(TAG, "UI executed on thread:" + Thread.currentThread().getName());
-                        mLoadingIndicator.setVisibility(View.INVISIBLE);
-                        mAdapter.setNewsData(generateNewsResult);
-                    }
-                });
-            }
-        });
+        loadItems();
+    }
 
-        newsThread.start();
+    private void loadItems(){
+        mLoadingIndicator.setVisibility(View.VISIBLE);
+        disposable = DataUtils.observeNews()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateItems);
+    }
+
+    private void updateItems(List<NewsItem> news){
+        mAdapter.setNewsData(news);
+        mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
 
     @Override

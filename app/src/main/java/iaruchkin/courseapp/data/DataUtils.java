@@ -1,5 +1,6 @@
 package iaruchkin.courseapp.data;
 
+import android.accounts.NetworkErrorException;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -7,14 +8,16 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import io.reactivex.Single;
+
 import static iaruchkin.courseapp.NewsListActivity.TAG;
 
 public class DataUtils {
 
     public static List<NewsItem> generateNews() {
 
-        Log.i(TAG, "generateNews");
-        Log.i(TAG,"News Generator executed on thread:" +  Thread.currentThread().getName());
+        Log.w(TAG, "generateNews");
+        Log.w(TAG,"News Generator executed on thread:" +  Thread.currentThread().getName());
         // we are adding this delay to imitate long loading process
 
         try {
@@ -148,6 +151,15 @@ public class DataUtils {
         ));
 
         return news;
+    }
+
+    public static Single<List<NewsItem>> observeNews() {
+        return Single.create(emitter -> {
+
+                List<NewsItem> news = generateNews();
+                emitter.onSuccess(news);
+
+        });
     }
 
     private static Date createDate(int year, int month, int date, int hrs, int min) {
