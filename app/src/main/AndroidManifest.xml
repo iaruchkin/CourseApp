@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="iaruchkin.courseapp">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
@@ -11,12 +13,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".AboutActivity"
+            android:label="@string/name_res"
+            android:parentActivityName=".NewsListActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".NewsListActivity" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
 
+        <activity android:name=".NewsListActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".NewsDetailsActivity"
+            android:parentActivityName=".NewsListActivity">
         </activity>
     </application>
 

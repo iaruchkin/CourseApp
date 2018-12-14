@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">AndroidAcademyApp</string>
-    <string name="about_res">Igor has been doing android development since 2018. Now he learns Android at Android Adcademy. Also creating small game on Unity engine.</string>
+    <string name="about_res">Igor has been doing android development since 2018. Now he learns Android at Android Academy. Also creating small game on Unity engine.</string>
     <string name="position1_res">Beginner Android Developer</string>
     <string name="name_res">Igor Ruchkin</string>
     <string name="portrait_dscr" translatable="false">portrait</string>
@@ -15,4 +15,8 @@
     <string name="instagram_link" translatable="false">https://instagram.com/igor_ofigensky</string>
     <string name="telegram_link" translatable="false">https://t.me/iaruchkin</string>
     <string name="vk_link" translatable="false">https://vk.com/id1619362</string>
+    <string name="menu_action_switch">About</string>
+    <string name="clicked" translatable="false">Item clicked!</string>
+    <string name="preview_dscr" translatable="false">item news preview image</string>
+    <string name="full_image_dscr" translatable="false">full image for article</string>
 </resources>
