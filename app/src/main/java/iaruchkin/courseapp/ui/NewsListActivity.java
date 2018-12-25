@@ -20,12 +20,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.Spinner;
 
 import java.util.List;
 
 import iaruchkin.courseapp.data.NewsCategory;
 import iaruchkin.courseapp.network.NetworkSilngleton;
-import iaruchkin.courseapp.ui.adapter.CategoryDialog;
+import iaruchkin.courseapp.ui.adapter.CategoriesSpinnerAdapter;
 import iaruchkin.courseapp.ui.adapter.Mapper;
 import iaruchkin.courseapp.ui.adapter.NewsItemAdapter;
 import iaruchkin.courseapp.R;
@@ -51,9 +52,11 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
     private View mError;
     @Nullable
     private Button errorAction;
+    @Nullable
     private Toolbar toolbar;
-    private Button mList;
-    private CategoryDialog categoryDialog;
+    @Nullable
+    private Spinner spinnerCategories;
+    private CategoriesSpinnerAdapter categoriesAdapter;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -63,12 +66,12 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
-        mList = findViewById(R.id.button_list);
         toolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.idRecyclerView);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
         mError = findViewById(R.id.error_layout);
         errorAction = findViewById(R.id.action_button);
+        spinnerCategories = findViewById(R.id.spinner_categories);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new NewsItemAdapter(this);
@@ -82,13 +85,13 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
             mRecyclerView.setLayoutManager(new GridLayoutManager(this, columnsCount));
         }
 
-        errorAction.setOnClickListener(view -> loadItems("home"));
+        setupSpinner();
+
+        errorAction.setOnClickListener(view -> loadItems(categoriesAdapter.getSelectedCategory().serverValue()));
 
         Log.i(TAG, "OnCreate executed on thread:" + Thread.currentThread().getName());
 
-        categoryDialog = new CategoryDialog();
-//        mList.setOnClickListener(view -> categoryDialog.show(getFragmentManager(), "CategoryDialog"));
-        mList.setOnClickListener(view -> showDialog(DIALOG));
+        categoriesAdapter.setOnCategorySelectedListener(category -> loadItems(category.serverValue()), spinnerCategories);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -125,7 +128,7 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
     protected void onStart() {
         Log.d(TAG, "onStart");
         super.onStart();
-        loadItems(categoryDialog.getSelectedCategory().serverValue());
+        loadItems(categoriesAdapter.getSelectedCategory().serverValue());
     }
 
     @Override
@@ -167,20 +170,11 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
                 return super.onOptionsItemSelected(item);
         }
     }
-//////////////////////////////////////
-    final int DIALOG = 1;
-    private NewsCategory selectedCategory = NewsCategory.HOME;
-    String items[] = NewsCategory.names();
 
-    public Dialog onCreateDialog(int id) {
-        AlertDialog.Builder adb = new AlertDialog.Builder(this)
-                .setTitle("Choose category")
-                .setItems(items, (dialog, item) -> {
-                    selectedCategory = NewsCategory.valueOf(items[item]);
-                    Log.d("Alert Dialog",selectedCategory.serverValue());
-                    loadItems(selectedCategory.serverValue());
-                });
-        return adb.create();
+    private void setupSpinner() {
+        final NewsCategory[] categories = NewsCategory.values();
+        categoriesAdapter = CategoriesSpinnerAdapter.createDefault(this, categories);
+        spinnerCategories.setAdapter(categoriesAdapter);
     }
 
 }
