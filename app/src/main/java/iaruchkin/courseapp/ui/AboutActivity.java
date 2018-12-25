@@ -1,4 +1,4 @@
-package iaruchkin.courseapp;
+package iaruchkin.courseapp.ui;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import iaruchkin.courseapp.R;
 
 public class AboutActivity extends AppCompatActivity {
 

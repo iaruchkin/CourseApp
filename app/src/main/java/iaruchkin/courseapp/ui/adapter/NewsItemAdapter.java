@@ -1,4 +1,4 @@
-package iaruchkin.courseapp;
+package iaruchkin.courseapp.ui.adapter;
 
         import android.support.annotation.NonNull;
         import android.support.v7.widget.RecyclerView;
@@ -10,13 +10,15 @@ package iaruchkin.courseapp;
 
         import com.bumptech.glide.Glide;
 
+        import java.util.ArrayList;
         import java.util.List;
 
+        import iaruchkin.courseapp.R;
         import iaruchkin.courseapp.data.NewsItem;
 
 
 public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsViewHolder>{
-    private List<NewsItem> newsItemList;
+    private final List<NewsItem> newsItemList = new ArrayList<>();
     private final NewsAdapterOnClickHandler mClickHandler;
 
     public interface NewsAdapterOnClickHandler {
@@ -55,7 +57,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsVi
 
         public void bind(NewsItem newsItem) {
             Glide.with(itemView.getContext()).load(newsItem.getImageUrl()).into(imageView);
-            categoryTextView.setText(newsItem.getCategory().getName());
+            categoryTextView.setText(newsItem.getCategory());
             titleTextView.setText(newsItem.getTitle());
             previewTextView.setText(newsItem.getPreviewText());
             dateTextView.setText(newsItem.getPublishDate().toString());
@@ -80,9 +82,9 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsVi
         }
     }
 
-    public void setNewsData(List<NewsItem> newsData) {
-        newsItemList = newsData;
-        notifyDataSetChanged();
-    }
-
+        public void replaceItems(List<NewsItem> newsData) {
+            newsItemList.clear();
+            newsItemList.addAll(newsData);
+            notifyDataSetChanged();
+        }
 }

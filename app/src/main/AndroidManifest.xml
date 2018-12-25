@@ -14,19 +14,21 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".AboutActivity"
+            android:name=".ui.AboutActivity"
             android:label="@string/name_res"
-            android:parentActivityName=".NewsListActivity">
+            android:parentActivityName=".ui.NewsListActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".NewsListActivity" />
+                android:value=".ui.NewsListActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".NewsListActivity">
+        <activity
+            android:name=".ui.NewsListActivity"
+            android:theme="@style/AppThemeNoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,8 +36,7 @@
         </activity>
 
         <activity
-            android:name=".NewsDetailsActivity"
-            android:parentActivityName=".NewsListActivity">
+            android:name=".ui.NewsDetailsActivity">
         </activity>
     </application>
 

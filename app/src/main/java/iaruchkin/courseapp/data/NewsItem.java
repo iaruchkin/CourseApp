@@ -1,47 +1,64 @@
 package iaruchkin.courseapp.data;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 public class NewsItem implements Serializable {
 
+
+    public static NewsItem create(@NonNull String title,
+                                  @Nullable String imageUrl,
+                                  @NonNull String category,
+                                  @NonNull Date publishDate,
+                                  @NonNull String previewText,
+                                  @NonNull String url) {
+        return new NewsItem(title, imageUrl, category, publishDate, previewText, url);
+    }
+
     @NonNull
     private final String title;
-    @NonNull
+    @Nullable
     private final String imageUrl;
     @NonNull
-    private final Category category;
+    private final String category;
     @NonNull
     private final Date publishDate;
     @NonNull
     private final String previewText;
     @NonNull
-    private final String fullText;
+    private final String url;
 
-    public NewsItem(@NonNull String title, @NonNull String imageUrl, @NonNull Category category,
-                    @NonNull Date publishDate, @NonNull String previewText, @NonNull String fullText) {
+    private NewsItem(@NonNull String title,
+                     @Nullable String imageUrl,
+                     @NonNull String category,
+                     @NonNull Date publishDate,
+                     @NonNull String previewText,
+                     @NonNull String fullText) {
         this.title = title;
         this.imageUrl = imageUrl;
         this.category = category;
         this.publishDate = publishDate;
         this.previewText = previewText;
-        this.fullText = fullText;
+        this.url = fullText;
     }
+
 
     @NonNull
     public String getTitle() {
         return title;
     }
 
-    @NonNull
+    @Nullable
     public String getImageUrl() {
         return imageUrl;
     }
 
     @NonNull
-    public Category getCategory() {
+    public String getCategory() {
         return category;
     }
 
@@ -56,8 +73,40 @@ public class NewsItem implements Serializable {
     }
 
     @NonNull
-    public String getFullText() {
-        return fullText;
+    public String getUrl() {
+        return url;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NewsItem newsItem = (NewsItem) o;
+        return Objects.equals(title, newsItem.title) &&
+                Objects.equals(imageUrl, newsItem.imageUrl) &&
+                Objects.equals(category, newsItem.category) &&
+                Objects.equals(publishDate, newsItem.publishDate) &&
+                Objects.equals(previewText, newsItem.previewText) &&
+                Objects.equals(url, newsItem.url);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(title, imageUrl, category, publishDate, previewText, url);
+    }
+
+    @Override
+    public String toString() {
+        return "NewsItem{" +
+                "title='" + title + '\'' +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", category='" + category + '\'' +
+                ", publishDate=" + publishDate +
+                ", previewText='" + previewText + '\'' +
+                ", url='" + url + '\'' +
+                '}';
     }
 }
 
