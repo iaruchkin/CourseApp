@@ -2,15 +2,27 @@ package iaruchkin.courseapp.room;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.util.Date;
+import iaruchkin.courseapp.data.NewsItem;
 
 @Entity(tableName = "news")
 public class NewsEntity {
 
     public NewsEntity() {
+    }
+
+    @Ignore
+    public NewsEntity(@NonNull NewsItem newsItem) {
+        this.mCategory = newsItem.getCategory();
+        this.mImageUrl = newsItem.getImageUrl();
+        this.mTitle = newsItem.getTitle();
+        this.mPublishedDate = newsItem.getPublishDate().toString();
+        this.mUrl = newsItem.getUrl();
+//        this.mFullText = newsItem.getFullText();
+        this.mPreviewText = newsItem.getPreviewText();
     }
 
     @NonNull
@@ -19,8 +31,8 @@ public class NewsEntity {
     private String mId;
 
     @NonNull
-    @ColumnInfo(name = "section")
-    private String mSection;
+    @ColumnInfo(name = "category")
+    private String mCategory;
 
     @NonNull
     @ColumnInfo(name = "subsection")
@@ -31,8 +43,8 @@ public class NewsEntity {
     private String mTitle;
 
     @NonNull
-    @ColumnInfo(name = "abstract")
-    private String mAbstract;
+    @ColumnInfo(name = "preview")
+    private String mPreviewText;
 
     @NonNull
     @ColumnInfo(name = "url")
@@ -40,7 +52,7 @@ public class NewsEntity {
 
     @NonNull
     @ColumnInfo(name = "publisheddate")
-    private Date mPublishedDate;
+    private String mPublishedDate;
 
     @NonNull
     @ColumnInfo(name = "imageurl")
@@ -52,8 +64,8 @@ public class NewsEntity {
     }
 
     @NonNull
-    public String getSection() {
-        return mSection;
+    public String getCategory() {
+        return mCategory;
     }
 
     @NonNull
@@ -67,8 +79,8 @@ public class NewsEntity {
     }
 
     @NonNull
-    public String getAbstract() {
-        return mAbstract;
+    public String getPreviewText() {
+        return mPreviewText;
     }
 
     @NonNull
@@ -77,7 +89,7 @@ public class NewsEntity {
     }
 
     @NonNull
-    public Date getPublishedDate() {
+    public String getPublishedDate() {
         return mPublishedDate;
     }
 
@@ -90,8 +102,8 @@ public class NewsEntity {
         mId = id;
     }
 
-    public void setSection(@NonNull String section) {
-        mSection = section;
+    public void setCategory(@NonNull String section) {
+        mCategory = section;
     }
 
     public void setSubsection(@NonNull String subsection) {
@@ -102,15 +114,15 @@ public class NewsEntity {
         mTitle = title;
     }
 
-    public void setAbstract(@NonNull String anAbstract) {
-        mAbstract = anAbstract;
+    public void setPreviewText(@NonNull String previewText) {
+        mPreviewText = previewText;
     }
 
     public void setUrl(@NonNull String url) {
         mUrl = url;
     }
 
-    public void setPublishedDate(@NonNull Date publishedDate) {
+    public void setPublishedDate(@NonNull String publishedDate) {
         mPublishedDate = publishedDate;
     }
 

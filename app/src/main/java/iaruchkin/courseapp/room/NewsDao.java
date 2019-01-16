@@ -14,8 +14,8 @@ public interface NewsDao {
     @Query("SELECT * FROM news")
     List<NewsEntity> getAll();
 
-    @Query("SELECT * FROM news WHERE section = :section")
-    List<NewsEntity> getAll(String section);
+    @Query("SELECT * FROM news WHERE category = :category")
+    List<NewsEntity> getAll(String category);
 
     @Query("SELECT * FROM news WHERE id = :id")
     NewsEntity getNewsById(String id);
@@ -32,7 +32,7 @@ public interface NewsDao {
     @Delete
     void delete(NewsEntity newsEntity);
 
-    @Query("DELETE FROM news WHERE section = :section")
-    void deleteAll(String section);
+    @Query("DELETE FROM news")
+    void deleteAll();
 
 }

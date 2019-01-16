@@ -1,13 +1,11 @@
 package iaruchkin.courseapp.ui;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -22,18 +20,29 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import iaruchkin.courseapp.data.NewsCategory;
 import iaruchkin.courseapp.network.NetworkSilngleton;
+import iaruchkin.courseapp.network.NewsDTO;
+import iaruchkin.courseapp.network.TopStoriesResponse;
+import iaruchkin.courseapp.room.AppDatabase;
+import iaruchkin.courseapp.room.ConverterNews;
+import iaruchkin.courseapp.room.NewsDao;
+import iaruchkin.courseapp.room.NewsEntity;
+import iaruchkin.courseapp.room.NewsRepository;
 import iaruchkin.courseapp.ui.adapter.CategoriesSpinnerAdapter;
 import iaruchkin.courseapp.ui.adapter.Mapper;
 import iaruchkin.courseapp.ui.adapter.NewsItemAdapter;
 import iaruchkin.courseapp.R;
 import iaruchkin.courseapp.data.NewsItem;
+import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static iaruchkin.courseapp.ui.NewsDetailsActivity.EXTRA_NEWS_ITEM;
@@ -53,12 +62,17 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
     @Nullable
     private Button errorAction;
     @Nullable
+    private FloatingActionButton mUpdate;
+    @Nullable
     private Toolbar toolbar;
     @Nullable
     private Spinner spinnerCategories;
     private CategoriesSpinnerAdapter categoriesAdapter;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private NewsRepository newsRepository;
+    private static List<NewsEntity> mNewsItems = new ArrayList<>();
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -66,12 +80,15 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
 
+        newsRepository = new NewsRepository(this.getApplicationContext());
+
         toolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.idRecyclerView);
         mLoadingIndicator = findViewById(R.id.pb_loading_indicator);
         mError = findViewById(R.id.error_layout);
         errorAction = findViewById(R.id.action_button);
         spinnerCategories = findViewById(R.id.spinner_categories);
+        mUpdate = findViewById(R.id.floatingActionButton);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new NewsItemAdapter(this);
@@ -87,27 +104,73 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
 
         setupSpinner();
 
-        errorAction.setOnClickListener(view -> loadItems(categoriesAdapter.getSelectedCategory().serverValue()));
+        mUpdate.setOnClickListener(view -> loadFromNet(getNewsCategory()));
+
+        errorAction.setOnClickListener(view -> loadFromNet(categoriesAdapter.getSelectedCategory().serverValue()));
 
         Log.i(TAG, "OnCreate executed on thread:" + Thread.currentThread().getName());
 
-        categoriesAdapter.setOnCategorySelectedListener(category -> loadItems(category.serverValue()), spinnerCategories);
+        categoriesAdapter.setOnCategorySelectedListener(category -> loadFromNet(category.serverValue()), spinnerCategories);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
-
-    private void loadItems(@NonNull String category){
+//тут грузим из сети в БД TODO
+    private void loadFromNet(@NonNull String category){
         mLoadingIndicator.setVisibility(View.VISIBLE);
         final Disposable disposable = NetworkSilngleton.getInstance()
                 .topStories()
                 .get(category)
-                .map(response -> Mapper.map(response.getNews()))
+//                .map(response -> Mapper.map(response.getNews()))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateNews, this::handleError);
+                .subscribe(this::updateDB, this::handleError);
         compositeDisposable.add(disposable);
     }
+
+    public void updateDB(TopStoriesResponse response) {
+
+//        Disposable disposable = NewsRepository.saveNews()
+        Disposable saveNewsToDb = Single.fromCallable(response::getNews)
+                .subscribeOn(Schedulers.io())
+//                .map(listResultDto ->{
+//                    ConverterNews.dtoToDao(listResultDto, getNewsCategory());
+//                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        newsEntities -> {
+                            ConverterNews.saveAllNewsToDb(this, ConverterNews.dtoToDao(newsEntities, getNewsCategory()));
+                        });
+        compositeDisposable.add(saveNewsToDb);
+    }
+
+//    private void loadToDb() {
+//        progressBarProgress = 0;
+//        progressBar.setProgress(progressBarProgress);
+//        compositeDisposable.add(
+//                TopStoriesApi.getInstance()
+//                        .topStories().get(NewsTypes.valueOf(categoryName))
+//                        .map(NewsItemHelper::parseToDaoArray)
+//                        .subscribeOn(Schedulers.io())
+//                        .subscribe(
+//                                newsEntities -> {
+//                                    newsDao.deleteAll();
+//                                    progressStep = 100/newsEntities.length;
+//                                    newsDao.insertAll(newsEntities);
+//                                },
+//                                this::logItemError
+//                        ));
+//        Log.i(TAG, "Writing items to Database");
+//    }
+
+    //тут грузим из БД в ресайклер TODO
+//    private void loadFromDb(String section){
+//        Disposable loadFromDb = Single.fromCallable(() -> ConverterNews.loadNewsFromDb(this, section))
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(this::checkResponseDb, this::handleError);
+//        mCompositeDisposable.add(loadFromDb);
+//    }
 
     private void updateNews(@Nullable List<NewsItem> news) {
 
@@ -116,6 +179,10 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
         }
         mError.setVisibility(View.GONE);
         mLoadingIndicator.setVisibility(View.INVISIBLE);
+    }
+
+    private String getNewsCategory() {
+        return categoriesAdapter.getSelectedCategory().serverValue();
     }
 
     private void handleError(Throwable th) {
@@ -128,7 +195,7 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
     protected void onStart() {
         Log.d(TAG, "onStart");
         super.onStart();
-        loadItems(categoriesAdapter.getSelectedCategory().serverValue());
+//        loadFromNet(categoriesAdapter.getSelectedCategory().serverValue());
     }
 
     @Override

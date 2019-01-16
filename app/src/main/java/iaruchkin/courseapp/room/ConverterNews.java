@@ -1,6 +1,7 @@
 package iaruchkin.courseapp.room;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +19,11 @@ public class ConverterNews {
             NewsEntity newsEntity = new NewsEntity();
             newsEntity.setId(dto.getUrl()+newsCategory);
             newsEntity.setUrl(dto.getUrl());
-            newsEntity.setSection(newsCategory);
-            newsEntity.setSubsection(dto.getSubsection());
+            newsEntity.setCategory(newsCategory);
+//            newsEntity.setSubsection(dto.getSubsection());
             newsEntity.setTitle(dto.getTitle());
-            newsEntity.setPublishedDate(dto.getPublishDate());
-//            newsEntity.setAbstract(dto.getAbstract());
+            newsEntity.setPublishedDate(dto.getPublishDate().toString());
+//            newsEntity.setPreviewText(dto.getPreviewText());
             if (dto.getMultimedia().size() != 0){
                 newsEntity.setImageUrl(dto.getMultimedia().get(LIST_IMAGE_SIZE).getUrl());
             } else {
@@ -38,17 +39,18 @@ public class ConverterNews {
         return db.newsDao().getNewsById(id);
     }
 
-    public static List<NewsEntity> loadNewsFromDb(Context context, String section) {
+    public static List<NewsEntity> loadNewsFromDb(Context context, String category) {
         AppDatabase db = AppDatabase.getAppDatabase(context);
-        return db.newsDao().getAll(section);
+        return db.newsDao().getAll(category);
     }
 
-    public static void saveAllNewsToDb(Context context, List<NewsEntity> list, String section){
+    public static void saveAllNewsToDb(Context context, List<NewsEntity> list){
         AppDatabase db = AppDatabase.getAppDatabase(context);
-        db.newsDao().deleteAll(section);
+        db.newsDao().deleteAll();
 
-        NewsEntity mas[] = list.toArray(new NewsEntity[list.size()]);
-        db.newsDao().insertAll(mas);
+        NewsEntity news[] = list.toArray(new NewsEntity[list.size()]);
+        db.newsDao().insertAll(news);
+        Log.e("Room DB", "data saved");
     }
 
     public static void editNewsToDb(Context context, NewsEntity newsEntity){

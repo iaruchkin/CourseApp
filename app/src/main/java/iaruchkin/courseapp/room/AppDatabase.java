@@ -13,6 +13,8 @@ public abstract class AppDatabase extends RoomDatabase {
 
     public abstract NewsDao newsDao();
 
+//    public abstract NewsAsyncDao newsAsyncDao();
+
     public static AppDatabase getAppDatabase(Context context){
         if (mSingleton == null){
             synchronized (AppDatabase.class){
