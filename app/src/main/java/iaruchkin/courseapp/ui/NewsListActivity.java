@@ -37,6 +37,7 @@ import iaruchkin.courseapp.ui.adapter.Mapper;
 import iaruchkin.courseapp.ui.adapter.NewsItemAdapter;
 import iaruchkin.courseapp.R;
 import iaruchkin.courseapp.data.NewsItem;
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -110,7 +111,9 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
 
         Log.i(TAG, "OnCreate executed on thread:" + Thread.currentThread().getName());
 
-        categoriesAdapter.setOnCategorySelectedListener(category -> loadFromNet(category.serverValue()), spinnerCategories);
+//        categoriesAdapter.setOnCategorySelectedListener(category -> loadFromNet(category.serverValue()), spinnerCategories);
+        categoriesAdapter.setOnCategorySelectedListener(NewsCategory::serverValue, spinnerCategories);
+
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -123,60 +126,52 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
                 .get(category)
 //                .map(response -> Mapper.map(response.getNews()))
                 .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+//                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateDB, this::handleError);
         compositeDisposable.add(disposable);
     }
 
     public void updateDB(TopStoriesResponse response) {
 
-//        Disposable disposable = NewsRepository.saveNews()
         Disposable saveNewsToDb = Single.fromCallable(response::getNews)
                 .subscribeOn(Schedulers.io())
 //                .map(listResultDto ->{
 //                    ConverterNews.dtoToDao(listResultDto, getNewsCategory());
 //                })
-                .observeOn(AndroidSchedulers.mainThread())
+//                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         newsEntities -> {
                             ConverterNews.saveAllNewsToDb(this, ConverterNews.dtoToDao(newsEntities, getNewsCategory()));
                         });
         compositeDisposable.add(saveNewsToDb);
+
     }
 
-//    private void loadToDb() {
-//        progressBarProgress = 0;
-//        progressBar.setProgress(progressBarProgress);
-//        compositeDisposable.add(
-//                TopStoriesApi.getInstance()
-//                        .topStories().get(NewsTypes.valueOf(categoryName))
-//                        .map(NewsItemHelper::parseToDaoArray)
-//                        .subscribeOn(Schedulers.io())
-//                        .subscribe(
-//                                newsEntities -> {
-//                                    newsDao.deleteAll();
-//                                    progressStep = 100/newsEntities.length;
-//                                    newsDao.insertAll(newsEntities);
-//                                },
-//                                this::logItemError
-//                        ));
-//        Log.i(TAG, "Writing items to Database");
-//    }
-
     //тут грузим из БД в ресайклер TODO
-//    private void loadFromDb(String section){
-//        Disposable loadFromDb = Single.fromCallable(() -> ConverterNews.loadNewsFromDb(this, section))
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(this::checkResponseDb, this::handleError);
-//        mCompositeDisposable.add(loadFromDb);
+    private void loadFromDb(String section){
+        Disposable loadFromDb = Single.fromCallable(() -> ConverterNews.loadNewsFromDb(this, section))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::updateNews, this::handleError);
+        compositeDisposable.add(loadFromDb);
+    }
+
+//    private void observeDb() {
+//        compositeDisposable.add(
+//                Observable.just(true)
+//                        .map(aBoolean -> newsDao.getAll())
+//                        .map(NewsItemHelper::convertDaoListoToDomain)
+//                        .subscribeOn(Schedulers.io())
+//                        .observeOn(AndroidSchedulers.mainThread())
+//                        .subscribe(this::showItems)
+//        );
 //    }
 
-    private void updateNews(@Nullable List<NewsItem> news) {
+    private void updateNews(@Nullable List<NewsEntity> news) {
 
-        if (mAdapter != null) {
-            mAdapter.replaceItems(news);
-        }
+//        if (mAdapter != null) {
+//            mAdapter.replaceItems(news);
+//        }
         mError.setVisibility(View.GONE);
         mLoadingIndicator.setVisibility(View.INVISIBLE);
     }

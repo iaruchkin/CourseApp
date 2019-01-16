@@ -10,7 +10,7 @@ import okhttp3.Response;
 public final class ApiKeyInterceptor implements Interceptor {
 
 
-    private static final String TOP_STORIES_API_KEY = "518d82bed02c453e9d81e615e1862f18";
+    private static final String TOP_STORIES_API_KEY = "RNk9dG9G7RrDEeKoVBC7UfDActFAD8lW";
     private static final String API_KEY_HEADER_NAME = "api-key";
 
 
@@ -28,11 +28,11 @@ public final class ApiKeyInterceptor implements Interceptor {
 
         final HttpUrl url = requestWithoutApiKey.url()
                 .newBuilder()
+                .addQueryParameter(API_KEY_HEADER_NAME, TOP_STORIES_API_KEY)
                 .build();
 
         final Request requestWithAttachedApiKey = requestWithoutApiKey.newBuilder()
                 .url(url)
-                .addHeader(API_KEY_HEADER_NAME, TOP_STORIES_API_KEY)
                 .build();
 
         return chain.proceed(requestWithAttachedApiKey);

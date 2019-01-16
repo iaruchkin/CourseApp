@@ -29,9 +29,9 @@ public class NewsRepository {
             newsEntity.setId(dto.getUrl() + newsCategory);
             newsEntity.setUrl(dto.getUrl());
             newsEntity.setCategory(newsCategory);
-//            newsEntity.setSubsection(dto.getSubsection());
+            newsEntity.setSubsection(dto.getSubsection());
             newsEntity.setTitle(dto.getTitle());
-            newsEntity.setPublishedDate(dto.getPublishDate().toString());
+            newsEntity.setPublishDate(dto.getPublishDate().toString());
 //            newsEntity.setPreviewText(dto.getPreviewText());
             if (dto.getMultimedia().size() != 0) {
                 newsEntity.setImageUrl(dto.getMultimedia().get(LIST_IMAGE_SIZE).getUrl());

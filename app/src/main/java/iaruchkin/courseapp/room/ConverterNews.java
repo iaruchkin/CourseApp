@@ -12,6 +12,7 @@ public class ConverterNews {
 
     private final static int LIST_IMAGE_SIZE = 1;
     public final static String KEY_NO_IMAGE = "no";
+    private static final String TAG = "RoomConverter";
 
     public static List<NewsEntity> dtoToDao(List<NewsDTO> listDto, String newsCategory){
         List<NewsEntity> listDao = new ArrayList<>();
@@ -20,10 +21,10 @@ public class ConverterNews {
             newsEntity.setId(dto.getUrl()+newsCategory);
             newsEntity.setUrl(dto.getUrl());
             newsEntity.setCategory(newsCategory);
-//            newsEntity.setSubsection(dto.getSubsection());
+            newsEntity.setSubsection(dto.getSubsection());
             newsEntity.setTitle(dto.getTitle());
-            newsEntity.setPublishedDate(dto.getPublishDate().toString());
-//            newsEntity.setPreviewText(dto.getPreviewText());
+            newsEntity.setPublishDate(dto.getPublishDate().toString());
+            newsEntity.setPreviewText(dto.getAbstractDescription());
             if (dto.getMultimedia().size() != 0){
                 newsEntity.setImageUrl(dto.getMultimedia().get(LIST_IMAGE_SIZE).getUrl());
             } else {
@@ -50,7 +51,9 @@ public class ConverterNews {
 
         NewsEntity news[] = list.toArray(new NewsEntity[list.size()]);
         db.newsDao().insertAll(news);
-        Log.e("Room DB", "data saved");
+        Log.e(TAG, "data saved");
+        Log.e(TAG, list.toString());
+
     }
 
     public static void editNewsToDb(Context context, NewsEntity newsEntity){

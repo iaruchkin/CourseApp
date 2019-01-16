@@ -15,6 +15,7 @@ package iaruchkin.courseapp.ui.adapter;
 
         import iaruchkin.courseapp.R;
         import iaruchkin.courseapp.data.NewsItem;
+        import iaruchkin.courseapp.room.NewsEntity;
 
 
 public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsViewHolder>{

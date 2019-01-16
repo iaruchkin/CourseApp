@@ -19,7 +19,7 @@ public class NewsEntity {
         this.mCategory = newsItem.getCategory();
         this.mImageUrl = newsItem.getImageUrl();
         this.mTitle = newsItem.getTitle();
-        this.mPublishedDate = newsItem.getPublishDate().toString();
+        this.mPublishDate = newsItem.getPublishDate().toString();
         this.mUrl = newsItem.getUrl();
 //        this.mFullText = newsItem.getFullText();
         this.mPreviewText = newsItem.getPreviewText();
@@ -51,8 +51,8 @@ public class NewsEntity {
     private String mUrl;
 
     @NonNull
-    @ColumnInfo(name = "publisheddate")
-    private String mPublishedDate;
+    @ColumnInfo(name = "publishdate")
+    private String mPublishDate;
 
     @NonNull
     @ColumnInfo(name = "imageurl")
@@ -89,8 +89,8 @@ public class NewsEntity {
     }
 
     @NonNull
-    public String getPublishedDate() {
-        return mPublishedDate;
+    public String getPublishDate() {
+        return mPublishDate;
     }
 
     @NonNull
@@ -122,11 +122,25 @@ public class NewsEntity {
         mUrl = url;
     }
 
-    public void setPublishedDate(@NonNull String publishedDate) {
-        mPublishedDate = publishedDate;
+    public void setPublishDate(@NonNull String publishDate) {
+        mPublishDate = publishDate;
     }
 
     public void setImageUrl(@NonNull String imageUrl) {
         mImageUrl = imageUrl;
+    }
+
+    @Override
+    public String toString() {
+        return "NewsEntity{" +
+                "mId='" + mId + '\'' +
+                ", mCategory='" + mCategory + '\'' +
+                ", mSubsection='" + mSubsection + '\'' +
+                ", mTitle='" + mTitle + '\'' +
+                ", mPreviewText='" + mPreviewText + '\'' +
+                ", mUrl='" + mUrl + '\'' +
+                ", mPublishDate='" + mPublishDate + '\'' +
+                ", mImageUrl='" + mImageUrl + '\'' +
+                '}';
     }
 }
