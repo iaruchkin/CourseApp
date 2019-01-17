@@ -42,6 +42,7 @@ public class ConverterNews {
 
     public static List<NewsEntity> loadNewsFromDb(Context context, String category) {
         AppDatabase db = AppDatabase.getAppDatabase(context);
+        Log.e(TAG, "data loaded");
         return db.newsDao().getAll(category);
     }
 

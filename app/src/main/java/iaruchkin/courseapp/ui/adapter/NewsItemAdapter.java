@@ -14,16 +14,15 @@ package iaruchkin.courseapp.ui.adapter;
         import java.util.List;
 
         import iaruchkin.courseapp.R;
-        import iaruchkin.courseapp.data.NewsItem;
         import iaruchkin.courseapp.room.NewsEntity;
 
 
 public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsViewHolder>{
-    private final List<NewsItem> newsItemList = new ArrayList<>();
+    private final List<NewsEntity> newsItemList = new ArrayList<>();
     private final NewsAdapterOnClickHandler mClickHandler;
 
     public interface NewsAdapterOnClickHandler {
-        void onClick(NewsItem newsItem);
+        void onClick(NewsEntity newsItem);
     }
 
     public NewsItemAdapter(NewsAdapterOnClickHandler clickHandler) {
@@ -39,7 +38,7 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsVi
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, final int position) {
-        NewsItem newsItem = newsItemList.get(position);
+        NewsEntity newsItem = newsItemList.get(position);
         holder.bind(newsItem);
     }
 
@@ -56,12 +55,12 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsVi
         private final TextView previewTextView;
         private final TextView dateTextView;
 
-        public void bind(NewsItem newsItem) {
+        public void bind(NewsEntity newsItem) {
             Glide.with(itemView.getContext()).load(newsItem.getImageUrl()).into(imageView);
             categoryTextView.setText(newsItem.getCategory());
             titleTextView.setText(newsItem.getTitle());
             previewTextView.setText(newsItem.getPreviewText());
-            dateTextView.setText(newsItem.getPublishDate().toString());
+            dateTextView.setText(newsItem.getPublishDate());
         }
 
         public NewsViewHolder(View view) {
@@ -78,12 +77,12 @@ public class NewsItemAdapter extends RecyclerView.Adapter<NewsItemAdapter.NewsVi
         @Override
         public void onClick(View v) {
             int adapterPosition = getAdapterPosition();
-            NewsItem newsItem = newsItemList.get(adapterPosition);
+            NewsEntity newsItem = newsItemList.get(adapterPosition);
             mClickHandler.onClick(newsItem);
         }
     }
 
-        public void replaceItems(List<NewsItem> newsData) {
+        public void replaceItems(List<NewsEntity> newsData) {
             newsItemList.clear();
             newsItemList.addAll(newsData);
             notifyDataSetChanged();

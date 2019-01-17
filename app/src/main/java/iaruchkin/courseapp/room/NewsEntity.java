@@ -2,27 +2,13 @@ package iaruchkin.courseapp.room;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-
-import iaruchkin.courseapp.data.NewsItem;
 
 @Entity(tableName = "news")
 public class NewsEntity {
 
     public NewsEntity() {
-    }
-
-    @Ignore
-    public NewsEntity(@NonNull NewsItem newsItem) {
-        this.mCategory = newsItem.getCategory();
-        this.mImageUrl = newsItem.getImageUrl();
-        this.mTitle = newsItem.getTitle();
-        this.mPublishDate = newsItem.getPublishDate().toString();
-        this.mUrl = newsItem.getUrl();
-//        this.mFullText = newsItem.getFullText();
-        this.mPreviewText = newsItem.getPreviewText();
     }
 
     @NonNull

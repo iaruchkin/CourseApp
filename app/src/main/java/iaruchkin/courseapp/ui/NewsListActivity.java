@@ -20,33 +20,23 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import iaruchkin.courseapp.data.NewsCategory;
 import iaruchkin.courseapp.network.NetworkSilngleton;
-import iaruchkin.courseapp.network.NewsDTO;
 import iaruchkin.courseapp.network.TopStoriesResponse;
-import iaruchkin.courseapp.room.AppDatabase;
 import iaruchkin.courseapp.room.ConverterNews;
-import iaruchkin.courseapp.room.NewsDao;
 import iaruchkin.courseapp.room.NewsEntity;
-import iaruchkin.courseapp.room.NewsRepository;
 import iaruchkin.courseapp.ui.adapter.CategoriesSpinnerAdapter;
-import iaruchkin.courseapp.ui.adapter.Mapper;
 import iaruchkin.courseapp.ui.adapter.NewsItemAdapter;
 import iaruchkin.courseapp.R;
-import iaruchkin.courseapp.data.NewsItem;
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
-import static iaruchkin.courseapp.ui.NewsDetailsActivity.EXTRA_NEWS_ITEM;
+import static iaruchkin.courseapp.ui.NewsDetailsActivity.EXTRA_NEWS_ID;
 
 public class NewsListActivity extends AppCompatActivity implements NewsItemAdapter.NewsAdapterOnClickHandler {
 
@@ -71,17 +61,12 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
     private CategoriesSpinnerAdapter categoriesAdapter;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
-    private NewsRepository newsRepository;
-    private static List<NewsEntity> mNewsItems = new ArrayList<>();
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Log.i(TAG, "onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_list);
-
-        newsRepository = new NewsRepository(this.getApplicationContext());
 
         toolbar = findViewById(R.id.toolbar);
         mRecyclerView = findViewById(R.id.idRecyclerView);
@@ -105,7 +90,11 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
 
         setupSpinner();
 
-        mUpdate.setOnClickListener(view -> loadFromNet(getNewsCategory()));
+        mUpdate.setOnClickListener(view ->
+        {
+            loadFromNet(getNewsCategory());
+            loadFromDb(getNewsCategory());
+        });
 
         errorAction.setOnClickListener(view -> loadFromNet(categoriesAdapter.getSelectedCategory().serverValue()));
 
@@ -114,19 +103,16 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
 //        categoriesAdapter.setOnCategorySelectedListener(category -> loadFromNet(category.serverValue()), spinnerCategories);
         categoriesAdapter.setOnCategorySelectedListener(NewsCategory::serverValue, spinnerCategories);
 
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
-//тут грузим из сети в БД TODO
+
     private void loadFromNet(@NonNull String category){
         mLoadingIndicator.setVisibility(View.VISIBLE);
         final Disposable disposable = NetworkSilngleton.getInstance()
                 .topStories()
                 .get(category)
-//                .map(response -> Mapper.map(response.getNews()))
                 .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::updateDB, this::handleError);
         compositeDisposable.add(disposable);
     }
@@ -135,10 +121,6 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
 
         Disposable saveNewsToDb = Single.fromCallable(response::getNews)
                 .subscribeOn(Schedulers.io())
-//                .map(listResultDto ->{
-//                    ConverterNews.dtoToDao(listResultDto, getNewsCategory());
-//                })
-//                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         newsEntities -> {
                             ConverterNews.saveAllNewsToDb(this, ConverterNews.dtoToDao(newsEntities, getNewsCategory()));
@@ -147,7 +129,6 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
 
     }
 
-    //тут грузим из БД в ресайклер TODO
     private void loadFromDb(String section){
         Disposable loadFromDb = Single.fromCallable(() -> ConverterNews.loadNewsFromDb(this, section))
                 .subscribeOn(Schedulers.io())
@@ -156,22 +137,11 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
         compositeDisposable.add(loadFromDb);
     }
 
-//    private void observeDb() {
-//        compositeDisposable.add(
-//                Observable.just(true)
-//                        .map(aBoolean -> newsDao.getAll())
-//                        .map(NewsItemHelper::convertDaoListoToDomain)
-//                        .subscribeOn(Schedulers.io())
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe(this::showItems)
-//        );
-//    }
-
     private void updateNews(@Nullable List<NewsEntity> news) {
 
-//        if (mAdapter != null) {
-//            mAdapter.replaceItems(news);
-//        }
+        if (mAdapter != null) {
+            mAdapter.replaceItems(news);
+        }
         mError.setVisibility(View.GONE);
         mLoadingIndicator.setVisibility(View.INVISIBLE);
     }
@@ -208,11 +178,11 @@ public class NewsListActivity extends AppCompatActivity implements NewsItemAdapt
     }
 
     @Override
-    public void onClick(NewsItem newsItem) {
+    public void onClick(NewsEntity newsItem) {
         Context context = this;
         Class destinationClass = NewsDetailsActivity.class;
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
-        intentToStartDetailActivity.putExtra(EXTRA_NEWS_ITEM,newsItem);
+        intentToStartDetailActivity.putExtra(EXTRA_NEWS_ID,newsItem.getId());
         startActivity(intentToStartDetailActivity);
     }
 
