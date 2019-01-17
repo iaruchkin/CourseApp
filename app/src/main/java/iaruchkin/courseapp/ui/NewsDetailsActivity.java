@@ -3,11 +3,9 @@ package iaruchkin.courseapp.ui;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.webkit.WebView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Preconditions;
 
 import iaruchkin.courseapp.R;
@@ -22,25 +20,18 @@ import io.reactivex.schedulers.Schedulers;
 public class NewsDetailsActivity extends AppCompatActivity {
     static final String EXTRA_NEWS_ID = "extra:newsID";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    public static final String TAG = NewsDetailsActivity.class.getSimpleName();
 
-//    WebView mWebView;
-    ImageView mImgFull;
-    TextView mTitle;
-    TextView mDate;
-    TextView mFullText;
+    WebView mWebView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_news_details_webview);
-        setContentView(R.layout.activity_news_details);
+        setContentView(R.layout.activity_news_details_webview);
 
         String newsId = getIntent().getStringExtra(EXTRA_NEWS_ID);
-//        mWebView = findViewById(R.id.web_view);
-        mImgFull = findViewById(R.id.img_full);
-        mTitle = findViewById(R.id.item_title);
-        mDate = findViewById(R.id.item_date);
-        mFullText = findViewById(R.id.item_text);
+        mWebView = findViewById(R.id.web_view);
+
         final ActionBar ab = getSupportActionBar();
         final ActionBar actionBar = Preconditions.checkNotNull(ab);
 
@@ -64,7 +55,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
         Disposable loadById = Single.fromCallable(() -> ConverterNews.getNewsById(this, id))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::setView);
+                .subscribe(this::setView,this::handleError);
         compositeDisposable.add(loadById);
     }
 
@@ -72,13 +63,10 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
         setTitle(newsItem.getCategory());
 
-        Glide.with(this).load(newsItem.getImageUrl()).into(mImgFull);
-        mTitle.setText(newsItem.getTitle());
-        mDate.setText(newsItem.getPublishDate());
-        mFullText.setText(newsItem.getPreviewText());
-//        mFullText.setText(newsItem.getFullText());
-
-//        mWebView.loadUrl(newsItem.getUrl());
+        mWebView.loadUrl(newsItem.getUrl());
     }
 
+    private void handleError(Throwable th) {
+        Log.e(TAG, th.getMessage(), th);
+    }
 }
