@@ -3,38 +3,93 @@ package iaruchkin.courseapp.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import java.util.concurrent.TimeUnit;
 
 import iaruchkin.courseapp.R;
+import iaruchkin.courseapp.ui.intro.IntroFragment;
+import iaruchkin.courseapp.ui.intro.IntroFragment2;
 import io.reactivex.Completable;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class IntroActivity extends AppCompatActivity {
+public class IntroActivity extends FragmentActivity {
 
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
+    private static final int NUM_PAGES = 2;
+    private ViewPager mPager;
+    private PagerAdapter mPagerAdapter;
+    private Button btnSkip, btnNext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_intro);
 
-        if (Storage.needToShowIntro(this.getApplicationContext())) {
-            setContentView(R.layout.activity_intro);
-            Disposable disposable = Completable.complete()
-                    .delay(3, TimeUnit.SECONDS)
-                    .subscribe(this::startSecondActivity);
-            compositeDisposable.add(disposable);
-        } else {
+        if (!Storage.needToShowIntro(this.getApplicationContext())) {
             startSecondActivity();
         }
+
+        mPager = findViewById(R.id.pager);
+        mPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+        mPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+
+        btnSkip = findViewById(R.id.btn_skip);
+        btnNext = findViewById(R.id.btn_next);
+
+        btnSkip.setOnClickListener(v -> startSecondActivity());
+
+        btnNext.setOnClickListener(v -> {
+
+            int current = mPager.getCurrentItem()+1;
+            if (current < NUM_PAGES) {
+                mPager.setCurrentItem(current);
+            } else {
+                startSecondActivity();
+            }
+        });
     }
+
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
+
+        @Override
+        public void onPageSelected(int position) {
+//                addBottomDots(position);
+
+            if (position == NUM_PAGES - 1) {
+                btnNext.setText(getString(R.string.start));
+                btnSkip.setVisibility(View.GONE);
+            } else {
+                btnNext.setText(getString(R.string.next));
+                btnSkip.setVisibility(View.VISIBLE);
+            }
+        }
+
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
 
     private void startSecondActivity() {
         startActivity(new Intent(this, NewsListActivity.class));
@@ -45,9 +100,29 @@ public class IntroActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Log.e("intro", "onStop");
-        compositeDisposable.dispose();
     }
 
+    private class ViewPagerAdapter extends FragmentStatePagerAdapter {
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position){
+                case 0:
+                    return new IntroFragment();
+                case 1:
+                    return new IntroFragment2();
+            }
+            return null;
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
+    }
 
 }
 
@@ -75,6 +150,7 @@ class Storage{
         counter = !counter;
         storage.saveCounter(context);
 
-        return counter;
+//        return counter;
+        return true;
     }
 }
