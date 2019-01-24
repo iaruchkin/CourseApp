@@ -52,4 +52,7 @@
     <string name="next">NEXT</string>
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
+    <string name="intro_page1_title">Browse news!</string>
+    <string name="intro_page2_title">Read them!</string>
+    <string name="intro_page3_title">Enjoy the app!</string>
 </resources>

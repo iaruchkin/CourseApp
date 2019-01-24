@@ -59,4 +59,8 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:$versionRoom"
     annotationProcessor "android.arch.persistence.room:compiler:$versionRoom"
     implementation 'com.android.support:design:28.0.0'
+
+    //circle indicator
+    implementation 'me.relex:circleindicator:1.2.2'
+
 }

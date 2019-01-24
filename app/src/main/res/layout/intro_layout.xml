@@ -3,28 +3,20 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/bg_screen1">
 
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginTop="30sp"-->
-        <!--android:layout_marginBottom="100dp"-->
-        <!--android:src="@drawable/intro_screen_01"/>-->
+    <android.support.v4.view.ViewPager
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-    <!--<TextView-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_alignParentBottom="true"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginBottom="30dp"-->
-        <!--android:text="Welcome!"-->
-        <!--android:textAppearance="@style/TextAppearance.Details.Title"-->
-        <!--android:textColor="@color/cardview_light_background"-->
-        <!--android:textSize="40sp" />-->
-
-<include layout="@layout/intro_viewpager"/>
+    <me.relex.circleindicator.CircleIndicator
+        android:id="@+id/indicator"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_alignParentBottom="true" />
 
     <Button
         android:id="@+id/btn_next"
