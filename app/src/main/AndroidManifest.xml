@@ -14,32 +14,36 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
+            android:name=".ui.MainActivity"
+            android:theme="@style/AppThemeNoActionBar">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            </intent-filter>
+        </activity>
+
+        <activity
             android:name=".ui.AboutActivity"
             android:label="@string/name_res"
-            android:parentActivityName=".ui.NewsListActivity">
+            android:parentActivityName=".ui.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.NewsListActivity" />
+                android:value=".ui.MainActivity" />
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.NewsListActivity"
-            android:theme="@style/AppThemeNoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-        <activity android:name=".ui.NewsDetailsActivity"></activity>
-        <activity android:name=".ui.IntroActivity">
+
+        <activity android:name=".ui.intro.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

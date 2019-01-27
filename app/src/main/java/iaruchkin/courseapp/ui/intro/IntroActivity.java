@@ -1,4 +1,4 @@
-package iaruchkin.courseapp.ui;
+package iaruchkin.courseapp.ui.intro;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +15,7 @@ import android.view.View;
 import android.widget.Button;
 
 import iaruchkin.courseapp.R;
-import iaruchkin.courseapp.ui.intro.IntroFragment;
-import iaruchkin.courseapp.ui.intro.IntroFragment2;
+import iaruchkin.courseapp.ui.MainActivity;
 import me.relex.circleindicator.CircleIndicator;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -87,7 +86,7 @@ public class IntroActivity extends FragmentActivity {
     };
 
     private void startSecondActivity() {
-        startActivity(new Intent(this, NewsListActivity.class));
+        startActivity(new Intent(this, MainActivity.class));
         finish();
     }
 
@@ -149,6 +148,6 @@ class Storage{
         storage.saveCounter(context);
 
 //        return counter;
-        return true;
+        return false;
     }
 }

@@ -33,7 +33,6 @@ public final class CategoriesSpinnerAdapter extends ArrayAdapter<NewsCategory> {
 
     }
 
-
     private final LayoutInflater inflater;
     private OnCategorySelectedListener categorySelectedListener;
 
