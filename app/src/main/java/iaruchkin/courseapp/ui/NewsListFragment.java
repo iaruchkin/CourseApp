@@ -42,11 +42,11 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
-import static iaruchkin.courseapp.ui.NewsDetailsFragment.EXTRA_NEWS_ID;
 
 public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAdapterOnClickHandler {
 
     public static final String TAG = NewsListFragment.class.getSimpleName();
+    private static final int LAYOUT = R.layout.activity_news_list;
 
     @Nullable
     private NewsItemAdapter mAdapter;
@@ -64,60 +64,66 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
     private Toolbar toolbar;
     @Nullable
     private Spinner spinnerCategories;
-    final NewsCategory[] categories = NewsCategory.values();
-//    private CategoriesSpinnerAdapter categoriesAdapter;
+
+    private CategoriesSpinnerAdapter categoriesAdapter;
 
     private final CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
-        Log.e(TAG, "onCreate");
-        View view = inflater.inflate(R.layout.activity_news_list, container, false);
-
-        Context context = getContext();
-
-        toolbar = view.findViewById(R.id.toolbar);
-        mRecyclerView = view.findViewById(R.id.idRecyclerView);
-        mLoadingIndicator = view.findViewById(R.id.pb_loading_indicator);
-        mError = view.findViewById(R.id.error_layout);
-        errorAction = view.findViewById(R.id.action_button);
-        spinnerCategories = view.findViewById(R.id.spinner_categories);
-        mUpdate = view.findViewById(R.id.floatingActionButton);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        mAdapter = new NewsItemAdapter(this);
-        mRecyclerView.setAdapter(mAdapter);
-
-        if(this.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        }
-        else{
-            final int columnsCount = getResources().getInteger(R.integer.landscape_news_columns_count);
-            mRecyclerView.setLayoutManager(new GridLayoutManager(context, columnsCount));
-        }
-
-        setupSpinner();
-
-        mUpdate.setOnClickListener(v ->
-        {
-//            loadFromNet(getNewsCategory());
-            loadFromDb(getNewsCategory());
-        });
-
-//        errorAction.setOnClickListener(v -> loadFromNet(categoriesAdapter.getSelectedCategory().serverValue()));
-//        mBtnError.setOnClickListener(v->loadItems(RestApi.mSections[mSpinner.getSelectedItemPosition()]));
-        errorAction.setOnClickListener(v -> loadFromDb(getNewsCategory()));
-
         Log.e(TAG, "OnCreateView executed on thread:" + Thread.currentThread().getName());
 
-//        categoriesAdapter.setOnCategorySelectedListener(category -> loadFromDb(category.serverValue()), spinnerCategories);
-//        categoriesAdapter.setOnCategorySelectedListener(NewsCategory::serverValue, spinnerCategories);
+        View view = inflater.inflate(LAYOUT, container, false);
 
-        ((AppCompatActivity)context).setSupportActionBar(toolbar);
-        ((AppCompatActivity)context).getSupportActionBar().setDisplayShowTitleEnabled(false);
+        setupUi(view);
+        setupUx();
 
         return view;
+    }
+
+    private void setupUi(View view) {
+        findViews(view);
+        setupToolbar(getContext());
+        setupSpinner();
+        setupOrientation(mRecyclerView);
+        setupRecyclerViewAdapter();
+    }
+
+    private void setupToolbar(Context context) {
+        ((AppCompatActivity)context).setSupportActionBar(toolbar);
+        ((AppCompatActivity)context).getSupportActionBar().setDisplayShowTitleEnabled(false);
+    }
+
+    private void setupRecyclerViewAdapter(){
+        mAdapter = new NewsItemAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    private void setupOrientation(RecyclerView recyclerView) {
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        } else {
+            final int columnsCount = getResources().getInteger(R.integer.landscape_news_columns_count);
+            mRecyclerView.setLayoutManager(new GridLayoutManager(getContext(), columnsCount));
+        }
+    }
+
+    private void setupSpinner() {
+        final NewsCategory[] categories = NewsCategory.values();
+        categoriesAdapter = CategoriesSpinnerAdapter.createDefault(getContext(), categories);
+        spinnerCategories.setAdapter(categoriesAdapter);
+    }
+
+    private void setupUx() {
+        mUpdate.setOnClickListener(v -> loadFromDb(getNewsCategory()));
+
+        errorAction.setOnClickListener(v -> loadFromDb(getNewsCategory()));
+
+        categoriesAdapter.setOnCategorySelectedListener(category -> loadFromDb(getNewsCategory()), spinnerCategories);
+//        categoriesAdapter.setOnCategorySelectedListener(NewsCategory::serverValue, spinnerCategories);
+
     }
 
     private void loadFromDb(String category){
@@ -138,7 +144,6 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
             mError.setVisibility(View.GONE);
             mLoadingIndicator.setVisibility(View.GONE);
             Log.e(TAG, "updateNews executed on thread:" + Thread.currentThread().getName());
-
         }
     }
 
@@ -166,9 +171,7 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
     }
 
     private String getNewsCategory() {
-//        return categoriesAdapter.getSelectedCategory().serverValue();
-        return categories[spinnerCategories.getSelectedItemPosition()].serverValue();
-
+        return categoriesAdapter.getSelectedCategory().serverValue();
     }
 
     private void handleError(Throwable th) {
@@ -209,11 +212,11 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
 //        intentToStartDetailActivity.putExtra(EXTRA_NEWS_ID,newsItem.getId());
 //        startActivity(intentToStartDetailActivity);
     }
-//
-//    @Override
-//    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.about_menu, menu);
-//    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.about_menu, menu);
+    }
 //
 //    @Override
 //    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
@@ -225,25 +228,25 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
 //                return super.onOptionsItemSelected(item);
 //        }
 //    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.menu_about:
+//                mListener.onNewsItemClicked(MainActivity.TAG_ABOUT, null);
+//                break;
+//            default: throw new IllegalArgumentException(getString(R.string.error_no_id)+": "+item.getItemId());
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
-    private void setupSpinner() {
-//        final NewsCategory[] categories = NewsCategory.values();
-//        categoriesAdapter = CategoriesSpinnerAdapter.createDefault(getContext(), categories);
-//        spinnerCategories.setAdapter(categoriesAdapter);
-        ArrayAdapter<NewsCategory> adapter = new ArrayAdapter<>(getContext(), R.layout.categories_spinner_item, categories);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerCategories.setAdapter(adapter);
-        spinnerCategories.setSelection(0);
-        spinnerCategories.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                loadFromNet(categories[position].serverValue());
-                loadFromDb(categories[position].serverValue());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
+    private void findViews(View view) {
+        toolbar = view.findViewById(R.id.toolbar);
+        mRecyclerView = view.findViewById(R.id.idRecyclerView);
+        mLoadingIndicator = view.findViewById(R.id.pb_loading_indicator);
+        mError = view.findViewById(R.id.error_layout);
+        errorAction = view.findViewById(R.id.action_button);
+        spinnerCategories = view.findViewById(R.id.spinner_categories);
+        mUpdate = view.findViewById(R.id.floatingActionButton);
     }
 }

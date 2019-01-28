@@ -1,45 +1,150 @@
 package iaruchkin.courseapp.ui.intro;
 
-import android.os.Bundle;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Button;
 
 import iaruchkin.courseapp.R;
+import iaruchkin.courseapp.ui.MessageFragmentListener;
+import me.relex.circleindicator.CircleIndicator;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class IntroFragment extends Fragment {
 
-    private int title, color, image;
+    private static final int NUM_PAGES = 3;
+    private ViewPager mPager;
+    private PagerAdapter mPagerAdapter;
+    private Button btnSkip, btnNext;
+    private MessageFragmentListener listener;
 
-    public static IntroFragment newInstance(int image, int title, int color) {
-        IntroFragment fragmentFirst = new IntroFragment();
-        Bundle args = new Bundle();
-        args.putInt("image", image);
-        args.putInt("title", title);
-        args.putInt("pageColor", color);
-        fragmentFirst.setArguments(args);
-        return fragmentFirst;
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        View view = inflater.inflate(R.layout.intro_layout, container, false);
+
+//        if (!Storage.needToShowIntro(getContext())) {
+//            startNews();
+//        }
+
+        mPager = view.findViewById(R.id.pager);
+        mPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
+        mPager.setAdapter(mPagerAdapter);
+        mPager.addOnPageChangeListener(viewPagerPageChangeListener);
+
+        btnSkip = view.findViewById(R.id.btn_skip);
+        btnNext = view.findViewById(R.id.btn_next);
+
+        btnSkip.setOnClickListener(v -> startNews());
+
+        btnNext.setOnClickListener(v -> {
+
+            int current = mPager.getCurrentItem()+1;
+            if (current < NUM_PAGES) {
+                mPager.setCurrentItem(current);
+            } else {
+                startNews();
+            }
+        });
+
+        CircleIndicator indicator = view.findViewById(R.id.indicator);
+        indicator.setViewPager(mPager);
+
+    return view;
     }
+
+    ViewPager.OnPageChangeListener viewPagerPageChangeListener = new ViewPager.OnPageChangeListener() {
 
         @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+        public void onPageSelected(int position) {
 
-            image = getArguments().getInt("image", 0);
-            title = getArguments().getInt("title",0);
-            color = getArguments().getInt("pageColor", R.color.bg_screen1);
+            if (position == NUM_PAGES - 1) {
+                btnNext.setText(getString(R.string.start));
+                btnSkip.setVisibility(View.GONE);
+            } else {
+                btnNext.setText(getString(R.string.next));
+                btnSkip.setVisibility(View.VISIBLE);
+            }
+        }
 
-            View view = inflater.inflate(R.layout.intro_fragment, container, false);
-            TextView tvLabel = view.findViewById(R.id.page_title);
-            ImageView imageView = view.findViewById(R.id.screenshot_img);
+        @Override
+        public void onPageScrolled(int arg0, float arg1, int arg2) {
 
-            view.setBackgroundColor(getResources().getColor(color));
-            imageView.setImageResource(image);
-            tvLabel.setText(getResources().getText(title));
+        }
 
-        return view;
+        @Override
+        public void onPageScrollStateChanged(int arg0) {
+
+        }
+    };
+
+    private void startNews() {
+//        startActivity(new Intent(this, MainActivity.class));
+//        finish();
+
+        if (listener != null) {
+            listener.onNextMessageClicked();
+        }
     }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("intro", "onStop");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        if (getActivity() instanceof MessageFragmentListener) {
+            listener = (MessageFragmentListener) getActivity();
+        }
+
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+
+    }
+
+    public static class ViewPagerAdapter extends FragmentStatePagerAdapter {
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return NUM_PAGES;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position){
+                case 0:
+                    return IntroPage.newInstance(R.drawable.intro_screen_01, R.string.intro_page1_title, R.color.bg_screen1);
+                case 1:
+                    return IntroPage.newInstance(R.drawable.intro_screen_02, R.string.intro_page2_title, R.color.bg_screen2);
+                case 2:
+                    return IntroPage.newInstance(R.drawable.intro_screen_03, R.string.intro_page3_title, R.color.bg_screen3);
+            }
+            return null;
+        }
+
+    }
+
 }

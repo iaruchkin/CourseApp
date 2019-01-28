@@ -1,49 +1,49 @@
 package iaruchkin.courseapp.ui;
 
-import android.content.res.Configuration;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.FrameLayout;
 
 import iaruchkin.courseapp.R;
+import iaruchkin.courseapp.ui.intro.IntroFragment;
+import iaruchkin.courseapp.ui.intro.Storage;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MessageFragmentListener {
 
     private FragmentManager mFragmentManager;
-//    private int mFrameList;
-//    private FrameLayout mFrameToolbar;
-//    private ToolbarFragment mToolbarFragment;
     private NewsListFragment mNewsListFragment;
-    private String mNewsId;
-//    private boolean isTwoPanel;
-    String TAG = "info";
+    private IntroFragment mIntroFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);//todo удалить
-        mFragmentManager = getSupportFragmentManager();
 
-//        init();
-//        if (savedInstanceState == null) {
-//            initToolbar();
+        init();
 
-//         replaceFragment(new NewsListFragment(), R.id.frame_list, false, "TAG_LIST_NEWS");
+        if (savedInstanceState == null){
+            if (Storage.needToShowIntro(this)) {
+                startIntro();
+            } else {
+                startNewsList();
+            }
+        }
+    }
 
-//        }
-
-//////
-        mNewsListFragment = new NewsListFragment();
+    private void startIntro(){
+        mIntroFragment = new IntroFragment();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.frame_list, mNewsListFragment)
+                .add(R.id.frame_list, mIntroFragment)
                 .commit();
     }
 
+    private void startNewsList(){
+        mNewsListFragment = new NewsListFragment();
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.frame_list, mNewsListFragment)
+                .commit();
+    }
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -51,19 +51,17 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-//    private void init(){
-//        setContentView(R.layout.activity_main);
-//        mFrameList = R.id.frame_list;
-//        mFragmentManager = getSupportFragmentManager();
-////        isTwoPanel = findViewById(R.id.frame_details) != null;
-//    }
+    private void init(){
+        setContentView(R.layout.activity_main);
+        mFragmentManager = getSupportFragmentManager();
+    }
 
-//    private void replaceFragment(Fragment fragment, int frame, boolean addToBackStack, String tag){
-//        FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction()
-//                .replace(frame, fragment, tag);
-//        if (addToBackStack) {
-//            fragmentTransaction.addToBackStack(null);
-//        }
-//        fragmentTransaction.commit();
-//    }
+    @Override
+    public void onNextMessageClicked() {
+        startNewsList();
+    }
 }
+
+//TODO Добвавить тэги(посмотреть в лекции)
+//TODO добавить связь со страничкой about и newsDetails
+//TODO избавиться от большого числа запросов на сервер
