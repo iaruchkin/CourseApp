@@ -1,7 +1,6 @@
 package iaruchkin.courseapp.ui.intro;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,8 +19,6 @@ import iaruchkin.courseapp.R;
 import iaruchkin.courseapp.ui.MessageFragmentListener;
 import me.relex.circleindicator.CircleIndicator;
 
-import static android.content.Context.MODE_PRIVATE;
-
 public class IntroFragment extends Fragment {
 
     private static final int NUM_PAGES = 3;
@@ -35,10 +32,6 @@ public class IntroFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.intro_layout, container, false);
-
-//        if (!Storage.needToShowIntro(getContext())) {
-//            startNews();
-//        }
 
         mPager = view.findViewById(R.id.pager);
         mPagerAdapter = new ViewPagerAdapter(getChildFragmentManager());
@@ -92,11 +85,8 @@ public class IntroFragment extends Fragment {
     };
 
     private void startNews() {
-//        startActivity(new Intent(this, MainActivity.class));
-//        finish();
-
         if (listener != null) {
-            listener.onNextMessageClicked();
+            listener.onActionClicked("NEWS_LIST", null);
         }
     }
 
@@ -109,11 +99,9 @@ public class IntroFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
-        if (getActivity() instanceof MessageFragmentListener) {
-            listener = (MessageFragmentListener) getActivity();
+        if (context instanceof MessageFragmentListener) {
+            listener = (MessageFragmentListener) context;
         }
-
     }
 
     @Override

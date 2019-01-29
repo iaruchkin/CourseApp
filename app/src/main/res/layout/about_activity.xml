@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<android.support.v7.widget.LinearLayoutCompat
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark" >
+    </android.support.v7.widget.Toolbar>
+
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -10,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ui.AboutActivity">
+        tools:context=".ui.AboutFragment">
 
         <android.support.v7.widget.AppCompatImageView
             android:layout_width="match_parent"
@@ -37,12 +52,13 @@
             <TextView
                 android:id="@+id/position_tw"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingStart="8dp"
                 android:paddingEnd="@dimen/standart_padding"
                 android:text="@string/position1_res"
                 android:textSize="@dimen/text_size"
-                android:gravity="center_vertical"/>
+                android:layout_gravity="center"/>
+
         </android.support.v7.widget.LinearLayoutCompat>
 
         <android.support.v7.widget.LinearLayoutCompat
@@ -62,12 +78,12 @@
             <TextView
                 android:id="@+id/position2_tw"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingStart="8dp"
                 android:paddingEnd="@dimen/standart_padding"
                 android:text="@string/position2_res"
                 android:textSize="@dimen/text_size"
-                android:gravity="center_vertical" />
+                android:layout_gravity="center" />
 
         </android.support.v7.widget.LinearLayoutCompat>
 
@@ -88,12 +104,12 @@
             <TextView
                 android:id="@+id/position3_tw"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:paddingStart="8dp"
                 android:paddingEnd="@dimen/standart_padding"
                 android:text="@string/position3_res"
                 android:textSize="@dimen/text_size"
-                android:gravity="center_vertical" />
+                android:layout_gravity="center" />
 
         </android.support.v7.widget.LinearLayoutCompat>
 
@@ -194,3 +210,5 @@
     </android.support.v7.widget.LinearLayoutCompat>
 
 </ScrollView>
+
+</android.support.v7.widget.LinearLayoutCompat>

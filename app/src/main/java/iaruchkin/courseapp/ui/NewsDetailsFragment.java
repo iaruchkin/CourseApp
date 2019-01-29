@@ -1,5 +1,6 @@
 package iaruchkin.courseapp.ui;
 
+import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -22,11 +23,21 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class NewsDetailsFragment extends Fragment {
-    static final String EXTRA_NEWS_ID = "extra:newsID";
+    static final String EXTRA_ITEM_URL = "extra:itemURL";
     private CompositeDisposable compositeDisposable = new CompositeDisposable();
     public static final String TAG = NewsDetailsFragment.class.getSimpleName();
+    private MessageFragmentListener listener;
 
     WebView mWebView;
+
+
+    public static NewsDetailsFragment newInstance(String itemURL){
+        NewsDetailsFragment fragmentFullNews = new NewsDetailsFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(EXTRA_ITEM_URL, itemURL);
+        fragmentFullNews.setArguments(bundle);
+        return fragmentFullNews;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,6 +57,8 @@ public class NewsDetailsFragment extends Fragment {
 //        actionBar.setDisplayHomeAsUpEnabled(true);
 
 //        loadById(newsId);
+            setView(getArguments().getString(EXTRA_ITEM_URL));
+
         return view;
     }
 
@@ -54,6 +67,19 @@ public class NewsDetailsFragment extends Fragment {
         compositeDisposable.clear();
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MessageFragmentListener){
+            listener = (MessageFragmentListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        listener = null;
+        super.onDetach();
+    }
 
 
 //    private void loadById(String id){
@@ -64,11 +90,12 @@ public class NewsDetailsFragment extends Fragment {
 //        compositeDisposable.add(loadById);
 //    }
 
-    private void setView(NewsEntity newsItem){
+    private void setView(String itemURL){
 
 //        setTitle(newsItem.getCategory());
-
-        mWebView.loadUrl(newsItem.getUrl());
+        if (itemURL != null) {
+        mWebView.loadUrl(itemURL);
+        }
     }
 
     private void handleError(Throwable th) {

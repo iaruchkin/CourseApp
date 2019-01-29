@@ -23,19 +23,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ui.AboutActivity"
-            android:label="@string/name_res"
-            android:parentActivityName=".ui.MainActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.MainActivity" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
-
     </application>
 
 </manifest>

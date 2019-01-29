@@ -31,6 +31,6 @@ public class Storage{
         storage.saveCounter(context);
 
 //        return counter;
-        return true;
+        return false;
     }
 }

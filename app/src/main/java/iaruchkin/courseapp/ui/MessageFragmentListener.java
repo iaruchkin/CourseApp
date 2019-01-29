@@ -2,6 +2,6 @@ package iaruchkin.courseapp.ui;
 
 public interface MessageFragmentListener {
 
-    void onNextMessageClicked();
+    void onActionClicked(String fragmentTag, String message);
 
 }

@@ -1,7 +1,6 @@
 package iaruchkin.courseapp.ui;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,8 +19,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
@@ -47,6 +44,7 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
 
     public static final String TAG = NewsListFragment.class.getSimpleName();
     private static final int LAYOUT = R.layout.activity_news_list;
+    private MessageFragmentListener listener;
 
     @Nullable
     private NewsItemAdapter mAdapter;
@@ -82,17 +80,52 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
         return view;
     }
 
+    @Override
+    public void onStart() {
+        Log.e(TAG, "onStart");
+        super.onStart();
+        loadFromDb(getNewsCategory());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        mLoadingIndicator.setVisibility(View.GONE);
+        compositeDisposable.clear();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mAdapter = null;
+        mRecyclerView = null;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof MessageFragmentListener) {
+            listener = (MessageFragmentListener) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+    }
+
     private void setupUi(View view) {
         findViews(view);
-        setupToolbar(getContext());
+        setupToolbar();
         setupSpinner();
         setupOrientation(mRecyclerView);
         setupRecyclerViewAdapter();
     }
 
-    private void setupToolbar(Context context) {
-        ((AppCompatActivity)context).setSupportActionBar(toolbar);
-        ((AppCompatActivity)context).getSupportActionBar().setDisplayShowTitleEnabled(false);
+    private void setupToolbar() {
+        setHasOptionsMenu(true);
+        ((AppCompatActivity)getContext()).setSupportActionBar(toolbar);
+        ((AppCompatActivity)getContext()).getSupportActionBar().setDisplayShowTitleEnabled(false);
     }
 
     private void setupRecyclerViewAdapter(){
@@ -185,61 +218,25 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
     }
 
     @Override
-    public void onStart() {
-        Log.e(TAG, "onStart");
-        super.onStart();
-        loadFromDb(getNewsCategory());
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        mLoadingIndicator.setVisibility(View.GONE);
-        compositeDisposable.clear();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mAdapter = null;
-        mRecyclerView = null;
-    }
-
-    @Override
     public void onClick(NewsEntity newsItem) {
-//        Class destinationClass = NewsDetailsFragment.class;
-//        Intent intentToStartDetailActivity = new Intent(getContext(), destinationClass);
-//        intentToStartDetailActivity.putExtra(EXTRA_NEWS_ID,newsItem.getId());
-//        startActivity(intentToStartDetailActivity);
+        listener.onActionClicked("NEWS_DETAILS", newsItem.getUrl());
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.about_menu, menu);
     }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.action_switch:
-//                startActivity(new Intent(getContext(), AboutActivity.class));
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case R.id.menu_about:
-//                mListener.onNewsItemClicked(MainActivity.TAG_ABOUT, null);
-//                break;
-//            default: throw new IllegalArgumentException(getString(R.string.error_no_id)+": "+item.getItemId());
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_switch:
+                listener.onActionClicked("ABOUT", null);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     private void findViews(View view) {
         toolbar = view.findViewById(R.id.toolbar);
         mRecyclerView = view.findViewById(R.id.idRecyclerView);

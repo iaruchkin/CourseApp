@@ -10,6 +10,7 @@
     <string name="subject">Message to Ruchkin Igor</string>
     <string name="email_adress" translatable="false">iaruchkin@gmail.com</string>
     <string name="error_no_email_app">Error! There is no email app!</string>
+    <string name="error_no_browser">Error! There is no browser app!</string>
     <string name="send_bt">send message</string>
     <string name="message_hint">Enter a message…</string>
     <string name="instagram_link" translatable="false">https://instagram.com/igor_ofigensky</string>
