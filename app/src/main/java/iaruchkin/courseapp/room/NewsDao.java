@@ -32,7 +32,7 @@ public interface NewsDao {
     @Delete
     void delete(NewsEntity newsEntity);
 
-    @Query("DELETE FROM news")
-    void deleteAll();
+    @Query("DELETE FROM news WHERE category = :category")
+    void deleteAll(String category);
 
 }

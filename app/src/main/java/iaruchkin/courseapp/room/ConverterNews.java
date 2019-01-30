@@ -42,17 +42,20 @@ public class ConverterNews {
 
     public static List<NewsEntity> loadNewsFromDb(Context context, String category) {
         AppDatabase db = AppDatabase.getAppDatabase(context);
-        Log.e(TAG, "data loaded");
+        Log.e(TAG, "data loaded from DB");
         return db.newsDao().getAll(category);
     }
 
-    public static void saveAllNewsToDb(Context context, List<NewsEntity> list){
+    public static void saveAllNewsToDb(Context context, List<NewsEntity> list, String category){
         AppDatabase db = AppDatabase.getAppDatabase(context);
-        db.newsDao().deleteAll();
+        db.newsDao().deleteAll(category);
+        Log.e(TAG, "DB: deleteAll");
 
         NewsEntity news[] = list.toArray(new NewsEntity[list.size()]);
         db.newsDao().insertAll(news);
-        Log.e(TAG, "data saved");
+        Log.e(TAG, "DB: insertAll");
+
+        Log.e(TAG, "data saved to DB");
         Log.e(TAG, list.toString());
 
     }

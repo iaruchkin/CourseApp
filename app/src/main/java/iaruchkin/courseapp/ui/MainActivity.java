@@ -100,4 +100,3 @@ public class MainActivity extends AppCompatActivity implements MessageFragmentLi
 
     }
 }
-//TODO подумать над уменьшением числа запросов к серверу
