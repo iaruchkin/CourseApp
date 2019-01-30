@@ -39,10 +39,13 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static iaruchkin.courseapp.ui.MainActivity.ABOUT_TAG;
+import static iaruchkin.courseapp.ui.MainActivity.NEWS_DETAILS_TAG;
+import static iaruchkin.courseapp.ui.MainActivity.NEWS_LIST_TAG;
+
 
 public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAdapterOnClickHandler {
 
-    public static final String TAG = NewsListFragment.class.getSimpleName();
     private static final int LAYOUT = R.layout.activity_news_list;
     private MessageFragmentListener listener;
 
@@ -70,7 +73,7 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
-        Log.e(TAG, "OnCreateView executed on thread:" + Thread.currentThread().getName());
+        Log.e(NEWS_LIST_TAG, "OnCreateView executed on thread:" + Thread.currentThread().getName());
 
         View view = inflater.inflate(LAYOUT, container, false);
 
@@ -82,9 +85,8 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
 
     @Override
     public void onStart() {
-        Log.e(TAG, "onStart");
+        Log.e(NEWS_LIST_TAG, "onStart");
         super.onStart();
-        loadFromDb(getNewsCategory());
     }
 
     @Override
@@ -150,16 +152,21 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
     }
 
     private void setupUx() {
+
         mUpdate.setOnClickListener(v -> loadFromDb(getNewsCategory()));
 
         errorAction.setOnClickListener(v -> loadFromDb(getNewsCategory()));
 
-        categoriesAdapter.setOnCategorySelectedListener(category -> loadFromDb(getNewsCategory()), spinnerCategories);
+        categoriesAdapter.setOnCategorySelectedListener(category -> {
+            mLoadingIndicator.setVisibility(View.VISIBLE);
+            loadFromDb(getNewsCategory());
+        }, spinnerCategories);
 //        categoriesAdapter.setOnCategorySelectedListener(NewsCategory::serverValue, spinnerCategories);
 
     }
 
     private void loadFromDb(String category){
+        mLoadingIndicator.setVisibility(View.VISIBLE);
         Disposable loadFromDb = Single.fromCallable(() -> ConverterNews.loadNewsFromDb(getContext(), category))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -176,7 +183,7 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
             }
             mError.setVisibility(View.GONE);
             mLoadingIndicator.setVisibility(View.GONE);
-            Log.e(TAG, "updateNews executed on thread:" + Thread.currentThread().getName());
+            Log.e(NEWS_LIST_TAG, "updateNews executed on thread:" + Thread.currentThread().getName());
         }
     }
 
@@ -192,15 +199,19 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
     }
 
     public void updateDB(TopStoriesResponse response) {
-        mLoadingIndicator.setVisibility(View.GONE);
-        Disposable saveNewsToDb = Single.fromCallable(response::getNews)
-                .subscribeOn(Schedulers.io())
-                .subscribe(
-                        newsEntities -> {
-                            ConverterNews.saveAllNewsToDb(getContext(), ConverterNews.dtoToDao(newsEntities, getNewsCategory()));
-                        });
-        compositeDisposable.add(saveNewsToDb);
-
+            Disposable saveNewsToDb = Single.fromCallable(response::getNews)
+                    .subscribeOn(Schedulers.io())
+                    .map(newsEntities -> {
+                        ConverterNews.saveAllNewsToDb(getContext(), ConverterNews.dtoToDao(newsEntities, getNewsCategory()));
+                        return ConverterNews.dtoToDao(newsEntities, getNewsCategory());
+                    })
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            newsEntities -> {
+                                mAdapter.replaceItems(newsEntities);
+                            });
+            compositeDisposable.add(saveNewsToDb);
+            mLoadingIndicator.setVisibility(View.GONE);
     }
 
     private String getNewsCategory() {
@@ -208,18 +219,18 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
     }
 
     private void handleError(Throwable th) {
-        Log.w(TAG, th.getMessage(), th);
+        Log.w(NEWS_LIST_TAG, th.getMessage(), th);
         mLoadingIndicator.setVisibility(View.GONE);
         mRecyclerView.setVisibility(View.GONE);
         mError.setVisibility(View.VISIBLE);
 
-        Log.e(TAG, "handleError executed on thread:" + Thread.currentThread().getName());
+        Log.e(NEWS_LIST_TAG, "handleError executed on thread:" + Thread.currentThread().getName());
 
     }
 
     @Override
     public void onClick(NewsEntity newsItem) {
-        listener.onActionClicked("NEWS_DETAILS", newsItem.getUrl());
+        listener.onActionClicked(NEWS_DETAILS_TAG, newsItem.getUrl());
     }
 
     @Override
@@ -231,7 +242,7 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_switch:
-                listener.onActionClicked("ABOUT", null);
+                listener.onActionClicked(ABOUT_TAG, null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

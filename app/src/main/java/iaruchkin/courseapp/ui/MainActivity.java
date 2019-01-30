@@ -5,11 +5,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import iaruchkin.courseapp.R;
-import iaruchkin.courseapp.room.NewsEntity;
 import iaruchkin.courseapp.ui.intro.IntroFragment;
 import iaruchkin.courseapp.ui.intro.Storage;
 
 public class MainActivity extends AppCompatActivity implements MessageFragmentListener {
+
+    public final static String NEWS_LIST_TAG = "NEWS_LIST";
+    public final static String NEWS_DETAILS_TAG = "NEWS_DETAILS";
+    public final static String ABOUT_TAG = "ABOUT";
+    public final static String INTRO_TAG = "INTRO";
 
     private FragmentManager mFragmentManager;
     private NewsListFragment mNewsListFragment;
@@ -80,22 +84,20 @@ public class MainActivity extends AppCompatActivity implements MessageFragmentLi
     @Override
     public void onActionClicked(String fragmentTag, String message) {
         switch (fragmentTag){
-            case "NEWS_LIST":
+            case NEWS_LIST_TAG:
                 startNewsList();
                 break;
-            case "NEWS_DETAILS":
+            case NEWS_DETAILS_TAG:
                 startNewsDetails(message);
                 break;
-            case "ABOUT":
+            case ABOUT_TAG:
                 startAbout();
                 break;
-            case "INTRO":
+            case INTRO_TAG:
                 startIntro();
                 break;
         }
 
     }
 }
-
-//TODO Поправить тэги, исправить ошибки
-//TODO избавиться от большого числа запросов на сервер
+//TODO подумать над уменьшением числа запросов к серверу

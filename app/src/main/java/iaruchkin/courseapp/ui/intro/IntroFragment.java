@@ -19,6 +19,8 @@ import iaruchkin.courseapp.R;
 import iaruchkin.courseapp.ui.MessageFragmentListener;
 import me.relex.circleindicator.CircleIndicator;
 
+import static iaruchkin.courseapp.ui.MainActivity.NEWS_LIST_TAG;
+
 public class IntroFragment extends Fragment {
 
     private static final int NUM_PAGES = 3;
@@ -86,7 +88,7 @@ public class IntroFragment extends Fragment {
 
     private void startNews() {
         if (listener != null) {
-            listener.onActionClicked("NEWS_LIST", null);
+            listener.onActionClicked(NEWS_LIST_TAG, null);
         }
     }
 

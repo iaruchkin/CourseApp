@@ -20,9 +20,10 @@ import android.widget.Toast;
 
 import iaruchkin.courseapp.R;
 
+import static iaruchkin.courseapp.ui.MainActivity.ABOUT_TAG;
+
 public class AboutFragment extends Fragment {
 
-    private static final String TAG = "ABOUT";
     private EditText mMessageEditText;
     private MessageFragmentListener listener;
 
@@ -91,7 +92,7 @@ public class AboutFragment extends Fragment {
 
     public void composeEmail(String messageEmail) {
 
-        Log.i(TAG, "composeEmail");
+        Log.i(ABOUT_TAG, "composeEmail");
 
         Intent intent = new Intent(Intent.ACTION_SENDTO);
         intent.setData(Uri.parse(String.format("mailto:%s", getString(R.string.email_adress)))); // only email apps should handle this
