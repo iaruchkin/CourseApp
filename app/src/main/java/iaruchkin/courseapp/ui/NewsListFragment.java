@@ -30,6 +30,7 @@ import iaruchkin.courseapp.network.NetworkSilngleton;
 import iaruchkin.courseapp.network.TopStoriesResponse;
 import iaruchkin.courseapp.room.ConverterNews;
 import iaruchkin.courseapp.room.NewsEntity;
+import iaruchkin.courseapp.service.NewsRequestService;
 import iaruchkin.courseapp.ui.adapter.CategoriesSpinnerAdapter;
 import iaruchkin.courseapp.ui.adapter.NewsItemAdapter;
 import iaruchkin.courseapp.R;
@@ -161,8 +162,6 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
             mLoadingIndicator.setVisibility(View.VISIBLE);
             loadFromDb(getNewsCategory());
         }, spinnerCategories);
-//        categoriesAdapter.setOnCategorySelectedListener(NewsCategory::serverValue, spinnerCategories);
-
     }
 
     private void loadFromDb(String category){
@@ -218,6 +217,7 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
                             newsEntities -> {
                                 mAdapter.replaceItems(newsEntities);
                                 Log.e(NEWS_LIST_TAG, "loaded from NET to DB: " + newsEntities.get(0).getCategory() + " / " + newsEntities.get(0).getTitle());
+                                NewsRequestService.start(getContext());//старт сервиса TODO убрать после проверки
                             });
             compositeDisposable.add(saveNewsToDb);
             mLoadingIndicator.setVisibility(View.GONE);

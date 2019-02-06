@@ -7,12 +7,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import iaruchkin.courseapp.network.NewsDTO;
+import iaruchkin.courseapp.App;
 
 public class ConverterNews {
 
     private final static int LIST_IMAGE_SIZE = 1;
     public final static String KEY_NO_IMAGE = "no";
     private static final String TAG = "RoomConverter";
+
+    private static NewsDao newsDao = AppDatabase.getAppDatabase(App.INSTANCE).newsDao();
 
     public static List<NewsEntity> dtoToDao(List<NewsDTO> listDto, String newsCategory){
         List<NewsEntity> listDao = new ArrayList<>();
@@ -57,6 +60,7 @@ public class ConverterNews {
 
         Log.e(TAG, "data saved to DB");
         Log.e(TAG, list.toString());
+        newsDao.insertAll(news);
 
     }
 
