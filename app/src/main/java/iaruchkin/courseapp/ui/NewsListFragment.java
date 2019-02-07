@@ -216,7 +216,6 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
                             newsEntities -> {
                                 mAdapter.replaceItems(newsEntities);
                                 Log.e(NEWS_LIST_TAG, "loaded from NET to DB: " + newsEntities.get(0).getCategory() + " / " + newsEntities.get(0).getTitle());
-                                NewsRequestService.start(getContext());//старт сервиса TODO убрать после проверки
                             });
             compositeDisposable.add(saveNewsToDb);
             mLoadingIndicator.setVisibility(View.GONE);
