@@ -56,4 +56,7 @@
     <string name="intro_page1_title">Browse news!</string>
     <string name="intro_page2_title">Read them!</string>
     <string name="intro_page3_title">Enjoy the app!</string>
+
+    <string name="cancel_work">Cancel</string>
+
 </resources>

@@ -1,13 +1,12 @@
 package iaruchkin.courseapp.service;
 
-import android.app.Notification;
+import iaruchkin.courseapp.R;
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
-import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -15,11 +14,15 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import iaruchkin.courseapp.R;
+import androidx.work.Worker;
+import androidx.work.WorkerParameters;
 import io.reactivex.disposables.Disposable;
 
-public class NewsRequestService extends Service {
+import static iaruchkin.courseapp.service.NetworkUtils.CancelReceiver.ACTION_CANCEL;
+
+public class NewsRequestService extends Worker {
     private static final String TAG = NewsRequestService.class.getName();
+    public static final String WORK_TAG = "News download";
 
     private static final String CHANNEL_ID = "CHANNEL_UPDATE_NEWS";
     private static final int UPDATE_NOTIFICATION_ID = 3447;
@@ -27,7 +30,10 @@ public class NewsRequestService extends Service {
     private NotificationManager notificationManager;
 
     private Disposable downloadDisposable;
-//    private PendingIntent onClickPendingIntent;
+
+    public NewsRequestService(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+        super(context, workerParams);
+    }
 
     public static void start (@NonNull Context context){
         Intent serviceIntent = new Intent(context, NewsRequestService.class);
@@ -38,66 +44,56 @@ public class NewsRequestService extends Service {
         }
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.e(TAG, "onStartCommand: service starting");
-
-        downloadDisposable = NetworkUtils.getInstance().getOnlineNetwork()
-                .timeout(1, TimeUnit.MINUTES)
-                .subscribe(
-                        newsEntities -> {
-                            makeNotification("Data succesfully downloaded to database", true);
-                        },
-                        this::logError
-                );
-        stopSelf();
-
-        Log.e(TAG, "onStartCommand: service stopped");
-        return START_STICKY;
-    }
-
     private void logError(Throwable throwable) {
         if (throwable instanceof IOException) {
             Log.e(TAG, "logError: " + throwable.getMessage());
         } else
             Log.e(TAG, "logError: stopped unexpectedly : \n" + throwable.getMessage());
-        makeNotification("Error while downloading news", false);
-    }
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        //TODO Broadcast Receiver
+        makeNotification(false);
     }
 
     @Override
-    public void onDestroy() {
-        if (downloadDisposable != null && !downloadDisposable.isDisposed()) {
+    public void onStopped() {
+        if (downloadDisposable != null && !downloadDisposable.isDisposed())
             downloadDisposable.dispose();
-        }
+        super.onStopped();
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
+    private void makeNotification(boolean success) {
+        Intent cancelIntent = new Intent(getApplicationContext(), NetworkUtils.CancelReceiver.class);
+        cancelIntent.setAction(ACTION_CANCEL);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, cancelIntent, 0);
 
-    private void makeNotification(String message, boolean success) {
         NotificationCompat.Builder notificationBuilder;
         if (success)
-            notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+            notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                     .setSmallIcon(R.drawable.bmstu_logo)
                     .setContentTitle("News app")
-                    .setContentText(message)
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    .setContentText("Data succesfully downloaded to DB")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setAutoCancel(true)
+                    .addAction(R.drawable.ic_stat_cancel, getApplicationContext().getString(R.string.cancel_work), pendingIntent);
+
         else
-            notificationBuilder = new NotificationCompat.Builder(this, CHANNEL_ID)
+            notificationBuilder = new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID)
                     .setSmallIcon(R.drawable.vec_error)
                     .setContentTitle("Download failed")
-                    .setContentText(message)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH);
+                    .setContentText("Error while downloading news")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setAutoCancel(true);
         if (notificationManager == null)
-            notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(UPDATE_NOTIFICATION_ID, notificationBuilder.build());
+    }
+
+    @NonNull
+    @Override
+    public Result doWork() {
+        Log.e(TAG, "onStartCommand: service starting");
+        downloadDisposable = NetworkUtils.getInstance().getOnlineNetwork()
+                .timeout(1, TimeUnit.MINUTES)
+                .subscribe(this::makeNotification, this::logError);
+        Log.e(TAG, "onStartCommand: service stopped");
+        return Result.SUCCESS;
     }
 }

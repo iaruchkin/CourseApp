@@ -44,7 +44,6 @@ import static iaruchkin.courseapp.ui.MainActivity.ABOUT_TAG;
 import static iaruchkin.courseapp.ui.MainActivity.NEWS_DETAILS_TAG;
 import static iaruchkin.courseapp.ui.MainActivity.NEWS_LIST_TAG;
 
-
 public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAdapterOnClickHandler {
 
     private static final int LAYOUT = R.layout.activity_news_list;
