@@ -1,4 +1,4 @@
-package iaruchkin.courseapp.ui;
+package iaruchkin.courseapp.ui.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -18,15 +18,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
+
 import iaruchkin.courseapp.R;
+import iaruchkin.courseapp.presentation.presenter.AboutPresenter;
+import iaruchkin.courseapp.presentation.view.AboutView;
 
 import static iaruchkin.courseapp.ui.MainActivity.ABOUT_TAG;
 
-public class AboutFragment extends Fragment {
+public class AboutFragment extends MvpAppCompatFragment implements AboutView {
 
     private EditText mMessageEditText;
     private MessageFragmentListener listener;
 
+    @InjectPresenter
+    AboutPresenter presenter;
+
+    @ProvidePresenter
+    AboutPresenter providePresenter() {
+        return new AboutPresenter();
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -61,23 +74,15 @@ public class AboutFragment extends Fragment {
         ImageView mInsagramLogo = view.findViewById(R.id.instagram_link);
         ImageView mVkLogo = view.findViewById(R.id.vk_link);
 
-        mSendButton.setOnClickListener(v -> composeEmail(mMessageEditText.getText().toString()));
-        mTelegramLogo.setOnClickListener(v -> openURL(getString(R.string.telegram_link)));
-        mInsagramLogo.setOnClickListener(v -> openURL(getString(R.string.instagram_link)));
-        mVkLogo.setOnClickListener(v -> openURL(getString(R.string.vk_link)));
+//        mSendButton.setOnClickListener(v -> composeEmail(mMessageEditText.getText().toString()));
+        mSendButton.setOnClickListener(v -> presenter.sendMessage(mMessageEditText.getText().toString()));
+//        mTelegramLogo.setOnClickListener(v -> openURL(getString(R.string.telegram_link)));
+        mTelegramLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.telegram_link)));
+//        mInsagramLogo.setOnClickListener(v -> openURL(getString(R.string.instagram_link)));
+        mInsagramLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.instagram_link)));
+//        mVkLogo.setOnClickListener(v -> openURL(getString(R.string.vk_link)));
+        mVkLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.vk_link)));
     }
-
-    private void openURL(String url){
-        Intent intent = new Intent()
-                .setAction(Intent.ACTION_VIEW)
-                .addCategory(Intent.CATEGORY_BROWSABLE)
-                .setData(Uri.parse(url));
-
-        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
-            startActivity(intent);
-        } else {
-            Toast.makeText(getContext(), getString(R.string.error_no_browser), Toast.LENGTH_SHORT).show();
-        }    }
 
     private void setActionBar(View view) {
         setHasOptionsMenu(true);
@@ -90,6 +95,20 @@ public class AboutFragment extends Fragment {
         }
     }
 
+    @Override
+    public void openURL(String url){
+        Intent intent = new Intent()
+                .setAction(Intent.ACTION_VIEW)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .setData(Uri.parse(url));
+
+        if (intent.resolveActivity(getContext().getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Toast.makeText(getContext(), getString(R.string.error_no_browser), Toast.LENGTH_SHORT).show();
+        }    }
+
+    @Override
     public void composeEmail(String messageEmail) {
 
         Log.i(ABOUT_TAG, "composeEmail");

@@ -8,6 +8,7 @@ buildscript {
         versionOkHttpLogingInterceptor = '3.6.0'
         versionGlide = "4.8.0"
         versionRoom = "1.1.1"
+        versionMoxy = "1.5.5"
     }
 
     repositories {

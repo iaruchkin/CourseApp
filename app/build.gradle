@@ -65,4 +65,9 @@ dependencies {
 
     //worker service
     implementation 'android.arch.work:work-runtime:1.0.0-alpha11'
+
+    //moxy
+    implementation "com.arello-mobile:moxy-app-compat:$versionMoxy"
+    implementation "com.android.support:appcompat-v7:$versionAppCompat"
+    annotationProcessor 'com.arello-mobile:moxy-compiler:1.5.5'
 }

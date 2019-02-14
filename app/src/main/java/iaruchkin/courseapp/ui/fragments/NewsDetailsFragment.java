@@ -1,9 +1,7 @@
-package iaruchkin.courseapp.ui;
+package iaruchkin.courseapp.ui.fragments;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 
-import com.bumptech.glide.util.Preconditions;
-
 import iaruchkin.courseapp.R;
-import iaruchkin.courseapp.room.ConverterNews;
-import iaruchkin.courseapp.room.NewsEntity;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 public class NewsDetailsFragment extends Fragment {
     static final String EXTRA_ITEM_URL = "extra:itemURL";

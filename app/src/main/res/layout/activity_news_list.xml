@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            tools:context=".ui.NewsListFragment"
+            tools:context=".ui.fragments.NewsListFragment"
             tools:listitem="@layout/item_news" />
 
         <android.support.design.widget.FloatingActionButton

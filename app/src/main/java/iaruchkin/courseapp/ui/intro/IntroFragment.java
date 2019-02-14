@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import iaruchkin.courseapp.R;
-import iaruchkin.courseapp.ui.MessageFragmentListener;
+import iaruchkin.courseapp.ui.fragments.MessageFragmentListener;
 import me.relex.circleindicator.CircleIndicator;
 
 import static iaruchkin.courseapp.ui.MainActivity.NEWS_LIST_TAG;

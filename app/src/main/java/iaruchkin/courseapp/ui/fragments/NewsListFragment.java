@@ -1,4 +1,4 @@
-package iaruchkin.courseapp.ui;
+package iaruchkin.courseapp.ui.fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
@@ -30,7 +30,6 @@ import iaruchkin.courseapp.network.NetworkSilngleton;
 import iaruchkin.courseapp.network.TopStoriesResponse;
 import iaruchkin.courseapp.room.ConverterNews;
 import iaruchkin.courseapp.room.NewsEntity;
-import iaruchkin.courseapp.service.NewsRequestService;
 import iaruchkin.courseapp.ui.adapter.CategoriesSpinnerAdapter;
 import iaruchkin.courseapp.ui.adapter.NewsItemAdapter;
 import iaruchkin.courseapp.R;

@@ -1,4 +1,4 @@
-package iaruchkin.courseapp.ui;
+package iaruchkin.courseapp.ui.fragments;
 
 public interface MessageFragmentListener {
 

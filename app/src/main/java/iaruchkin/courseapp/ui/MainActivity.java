@@ -5,6 +5,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 
 import iaruchkin.courseapp.R;
+import iaruchkin.courseapp.ui.fragments.AboutFragment;
+import iaruchkin.courseapp.ui.fragments.MessageFragmentListener;
+import iaruchkin.courseapp.ui.fragments.NewsDetailsFragment;
+import iaruchkin.courseapp.ui.fragments.NewsListFragment;
 import iaruchkin.courseapp.ui.intro.IntroFragment;
 import iaruchkin.courseapp.ui.intro.Storage;
 
