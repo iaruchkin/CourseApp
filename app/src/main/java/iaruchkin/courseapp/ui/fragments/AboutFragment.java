@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -31,6 +30,10 @@ import static iaruchkin.courseapp.ui.MainActivity.ABOUT_TAG;
 public class AboutFragment extends MvpAppCompatFragment implements AboutView {
 
     private EditText mMessageEditText;
+    private TextView mSendButton;
+    private ImageView mTelegramLogo;
+    private ImageView mInsagramLogo;
+    private ImageView mVkLogo;
     private MessageFragmentListener listener;
 
     @InjectPresenter
@@ -49,6 +52,7 @@ public class AboutFragment extends MvpAppCompatFragment implements AboutView {
 
         setActionBar(view);
         findViews(view);
+        setupUx();
 
         return view;
     }
@@ -65,34 +69,6 @@ public class AboutFragment extends MvpAppCompatFragment implements AboutView {
     public void onDetach() {
         listener = null;
         super.onDetach();
-    }
-
-    private void findViews(View view) {
-        mMessageEditText = view.findViewById(R.id.et_message);
-        TextView mSendButton = view.findViewById(R.id.b_send);
-        ImageView mTelegramLogo = view.findViewById(R.id.telegram_link);
-        ImageView mInsagramLogo = view.findViewById(R.id.instagram_link);
-        ImageView mVkLogo = view.findViewById(R.id.vk_link);
-
-//        mSendButton.setOnClickListener(v -> composeEmail(mMessageEditText.getText().toString()));
-        mSendButton.setOnClickListener(v -> presenter.sendMessage(mMessageEditText.getText().toString()));
-//        mTelegramLogo.setOnClickListener(v -> openURL(getString(R.string.telegram_link)));
-        mTelegramLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.telegram_link)));
-//        mInsagramLogo.setOnClickListener(v -> openURL(getString(R.string.instagram_link)));
-        mInsagramLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.instagram_link)));
-//        mVkLogo.setOnClickListener(v -> openURL(getString(R.string.vk_link)));
-        mVkLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.vk_link)));
-    }
-
-    private void setActionBar(View view) {
-        setHasOptionsMenu(true);
-        ((AppCompatActivity) getContext()).setSupportActionBar(view.findViewById(R.id.toolbar));
-        ActionBar actionBar = ((AppCompatActivity) getContext()).getSupportActionBar();
-        actionBar.setTitle(getString(R.string.name_res));
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-        }
     }
 
     @Override
@@ -123,5 +99,32 @@ public class AboutFragment extends MvpAppCompatFragment implements AboutView {
             Toast.makeText(getContext(), R.string.error_no_email_app, Toast.LENGTH_LONG).show();
         }
     }
+
+    public void setupUx(){
+        mSendButton.setOnClickListener(v -> presenter.sendMessage(mMessageEditText.getText().toString()));
+        mTelegramLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.telegram_link)));
+        mInsagramLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.instagram_link)));
+        mVkLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.vk_link)));
+    }
+
+    private void setActionBar(View view) {
+        setHasOptionsMenu(true);
+        ((AppCompatActivity) getContext()).setSupportActionBar(view.findViewById(R.id.toolbar));
+        ActionBar actionBar = ((AppCompatActivity) getContext()).getSupportActionBar();
+        actionBar.setTitle(getString(R.string.name_res));
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+        }
+    }
+
+    private void findViews(View view) {
+        mMessageEditText = view.findViewById(R.id.et_message);
+        mSendButton = view.findViewById(R.id.b_send);
+        mTelegramLogo = view.findViewById(R.id.telegram_link);
+        mInsagramLogo = view.findViewById(R.id.instagram_link);
+        mVkLogo = view.findViewById(R.id.vk_link);
+    }
+
 }
 

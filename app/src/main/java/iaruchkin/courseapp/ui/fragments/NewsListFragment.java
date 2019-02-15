@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -23,30 +22,39 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 
+import com.arellomobile.mvp.MvpAppCompatFragment;
+import com.arellomobile.mvp.presenter.InjectPresenter;
+import com.arellomobile.mvp.presenter.ProvidePresenter;
+
 import java.util.List;
 
+import iaruchkin.courseapp.common.State;
 import iaruchkin.courseapp.data.NewsCategory;
 import iaruchkin.courseapp.network.NetworkSilngleton;
-import iaruchkin.courseapp.network.TopStoriesResponse;
-import iaruchkin.courseapp.room.ConverterNews;
+import iaruchkin.courseapp.presentation.presenter.NewsListPresenter;
+import iaruchkin.courseapp.presentation.view.NewsListView;
 import iaruchkin.courseapp.room.NewsEntity;
 import iaruchkin.courseapp.ui.adapter.CategoriesSpinnerAdapter;
 import iaruchkin.courseapp.ui.adapter.NewsItemAdapter;
 import iaruchkin.courseapp.R;
-import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 import static iaruchkin.courseapp.ui.MainActivity.ABOUT_TAG;
 import static iaruchkin.courseapp.ui.MainActivity.NEWS_DETAILS_TAG;
 import static iaruchkin.courseapp.ui.MainActivity.NEWS_LIST_TAG;
 
-public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAdapterOnClickHandler {
+public class NewsListFragment extends MvpAppCompatFragment implements NewsItemAdapter.NewsAdapterOnClickHandler, NewsListView {
 
     private static final int LAYOUT = R.layout.activity_news_list;
     private MessageFragmentListener listener;
+
+    @InjectPresenter
+    NewsListPresenter newsListPresenter;
+
+    @ProvidePresenter
+    NewsListPresenter provideNewsListPresenter() {
+        return new NewsListPresenter(NetworkSilngleton.getInstance());
+    }
 
     @Nullable
     private NewsItemAdapter mAdapter;
@@ -91,7 +99,6 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
     @Override
     public void onStop() {
         super.onStop();
-        mLoadingIndicator.setVisibility(View.GONE);
         compositeDisposable.clear();
     }
 
@@ -152,87 +159,81 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
 
     private void setupUx() {
 
-        mUpdate.setOnClickListener(v -> loadFromNet(getNewsCategory()));
+        mUpdate.setOnClickListener(v -> loadNews(getNewsCategory()));//force update
 
-        errorAction.setOnClickListener(v -> loadFromDb(getNewsCategory()));
+        errorAction.setOnClickListener(v -> loadNews(getNewsCategory()));
 
         categoriesAdapter.setOnCategorySelectedListener(category -> {
-            mLoadingIndicator.setVisibility(View.VISIBLE);
-            loadFromDb(getNewsCategory());
+            loadNews(getNewsCategory());
         }, spinnerCategories);
     }
 
-    private void loadFromDb(String category){
-        mLoadingIndicator.setVisibility(View.VISIBLE);
-        Disposable loadFromDb = Single.fromCallable(() -> ConverterNews
-                .loadNewsFromDb(getContext(), category))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateNews, this::handleError);
-        compositeDisposable.add(loadFromDb);
-    }
-
-    private void updateNews(@Nullable List<NewsEntity> news) {
-        if (news.size()==0){
-            loadFromNet(getNewsCategory());
-            Log.e(NEWS_LIST_TAG, "there is no news in category : " + getNewsCategory());
-        }else {
-            if (mAdapter != null) {
-                mAdapter.replaceItems(news);
-            }
-            mError.setVisibility(View.GONE);
-            mLoadingIndicator.setVisibility(View.GONE);
-            Log.e(NEWS_LIST_TAG, "loaded from DB: " + news.get(0).getCategory() + " / " + news.get(0).getTitle());
-            Log.e(NEWS_LIST_TAG, "updateNews executed on thread: " + Thread.currentThread().getName());
-        }
-    }
-
-    private void loadFromNet(@NonNull String category){
-        mLoadingIndicator.setVisibility(View.VISIBLE);
-        final Disposable disposable = NetworkSilngleton.getInstance()
-                .topStories()
-                .get(category)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateDB, this::handleError);
-        compositeDisposable.add(disposable);
-    }
-
-    public void updateDB(TopStoriesResponse response) {
-        if (response.getNews().size() == 0) {
-            mError.setVisibility(View.VISIBLE);
-            mLoadingIndicator.setVisibility(View.GONE);
-        } else {
-            Disposable saveNewsToDb = Single.fromCallable(response::getNews)
-                    .subscribeOn(Schedulers.io())
-                    .map(newsDTO -> {
-                        ConverterNews.saveAllNewsToDb(getContext(), ConverterNews
-                                .dtoToDao(newsDTO, getNewsCategory()),getNewsCategory());
-                        return ConverterNews.loadNewsFromDb(getContext(), getNewsCategory());
-                    })
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(
-                            newsEntities -> {
-                                mAdapter.replaceItems(newsEntities);
-                                Log.e(NEWS_LIST_TAG, "loaded from NET to DB: " + newsEntities.get(0).getCategory() + " / " + newsEntities.get(0).getTitle());
-                            });
-            compositeDisposable.add(saveNewsToDb);
-            mLoadingIndicator.setVisibility(View.GONE);
-        }
-    }
+//    private void loadFromDb(String category){
+//        showState(State.Loading);
+//        Disposable loadFromDb = Single.fromCallable(() -> ConverterNews
+//                .loadNewsFromDb(getContext(), category))
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(this::updateNews, this::handleError);
+//        compositeDisposable.add(loadFromDb);
+//    }
+//
+//    private void updateNews(@Nullable List<NewsEntity> news) {
+//        if (news.size()==0){
+//            loadFromNet(getNewsCategory());
+//            Log.e(NEWS_LIST_TAG, "there is no news in category : " + getNewsCategory());
+//        }else {
+//            if (mAdapter != null) {
+//                mAdapter.replaceItems(news);
+//            }
+//            showState(State.HasData);
+//            Log.e(NEWS_LIST_TAG, "loaded from DB: " + news.get(0).getCategory() + " / " + news.get(0).getTitle());
+//            Log.e(NEWS_LIST_TAG, "updateNews executed on thread: " + Thread.currentThread().getName());
+//        }
+//    }
+//
+//    private void loadFromNet(@NonNull String category){
+//        showState(State.Loading);
+//        final Disposable disposable = NetworkSilngleton.getInstance()
+//                .topStories()
+//                .get(category)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(this::updateDB, this::handleError);
+//        compositeDisposable.add(disposable);
+//    }
+//
+//    public void updateDB(TopStoriesResponse response) {
+//        if (response.getNews().size() == 0) {
+//            showState(State.HasNoData);
+//        } else {
+//            Disposable saveNewsToDb = Single.fromCallable(response::getNews)
+//                    .subscribeOn(Schedulers.io())
+//                    .map(newsDTO -> {
+//                        ConverterNews.saveAllNewsToDb(getContext(), ConverterNews
+//                                .dtoToDao(newsDTO, getNewsCategory()),getNewsCategory());
+//                        return ConverterNews.loadNewsFromDb(getContext(), getNewsCategory());
+//                    })
+//                    .observeOn(AndroidSchedulers.mainThread())
+//                    .subscribe(
+//                            newsEntities -> {
+//                                mAdapter.replaceItems(newsEntities);
+//                                Log.e(NEWS_LIST_TAG, "loaded from NET to DB: " + newsEntities.get(0).getCategory() + " / " + newsEntities.get(0).getTitle());
+//                            });
+//            compositeDisposable.add(saveNewsToDb);
+//            showState(State.HasData);
+//        }
+//    }
+//
+//    private void handleError(Throwable th) {
+//        showState(State.NetworkError);
+//        Log.w(NEWS_LIST_TAG, th.getMessage(), th);
+//        Log.e(NEWS_LIST_TAG, "handleError executed on thread: " + Thread.currentThread().getName());
+//    }
+//
 
     private String getNewsCategory() {
         return categoriesAdapter.getSelectedCategory().serverValue();
-    }
-
-    private void handleError(Throwable th) {
-        Log.w(NEWS_LIST_TAG, th.getMessage(), th);
-        mLoadingIndicator.setVisibility(View.GONE);
-        mRecyclerView.setVisibility(View.GONE);
-        mError.setVisibility(View.VISIBLE);
-
-        Log.e(NEWS_LIST_TAG, "handleError executed on thread: " + Thread.currentThread().getName());
-
     }
 
     @Override
@@ -255,6 +256,63 @@ public class NewsListFragment extends Fragment implements NewsItemAdapter.NewsAd
                 return super.onOptionsItemSelected(item);
         }
     }
+
+    public void loadNews(String category) {
+
+        newsListPresenter.loadNews(category);
+
+    }
+
+    @Override
+    public void showNews(List<NewsEntity> news) {
+        if (mAdapter != null) {
+            mAdapter.replaceItems(news);
+        }
+    }
+
+    @Override
+    public void showState(@NonNull State state) {
+        switch (state) {
+            case HasData:
+                mError.setVisibility(View.GONE);
+                mLoadingIndicator.setVisibility(View.GONE);
+
+                mRecyclerView.setVisibility(View.VISIBLE);
+                break;
+
+            case HasNoData:
+                mLoadingIndicator.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.GONE);
+
+                mError.setVisibility(View.VISIBLE);
+                break;
+
+            case NetworkError:
+                mLoadingIndicator.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.GONE);
+
+                mError.setVisibility(View.VISIBLE);
+                break;
+
+            case ServerError:
+                mLoadingIndicator.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.GONE);
+
+                mError.setVisibility(View.VISIBLE);
+                break;
+
+            case Loading:
+                mError.setVisibility(View.GONE);
+                mRecyclerView.setVisibility(View.GONE);
+
+                mLoadingIndicator.setVisibility(View.VISIBLE);
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unknown state: " + state);
+        }
+    }
+
     private void findViews(View view) {
         toolbar = view.findViewById(R.id.toolbar);
         mRecyclerView = view.findViewById(R.id.idRecyclerView);
