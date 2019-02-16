@@ -79,11 +79,11 @@ public class NewsRequestService extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-        Log.e(TAG, "onStartCommand: service starting");
+        Log.i(TAG, "onStartCommand: service starting");
         downloadDisposable = NetworkUtils.getInstance().getOnlineNetwork()
                 .timeout(1, TimeUnit.MINUTES)
                 .subscribe(this::makeNotification, this::logError);
-        Log.e(TAG, "onStartCommand: service stopped");
+        Log.i(TAG, "onStartCommand: service stopped");
         return Result.SUCCESS;
     }
 }

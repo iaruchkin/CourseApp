@@ -80,7 +80,7 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsItemAd
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                 Bundle savedInstanceState) {
-        Log.e(NEWS_LIST_TAG, "OnCreateView executed on thread:" + Thread.currentThread().getName());
+        Log.i(NEWS_LIST_TAG, "OnCreateView executed on thread:" + Thread.currentThread().getName());
 
         View view = inflater.inflate(LAYOUT, container, false);
 
@@ -92,7 +92,7 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsItemAd
 
     @Override
     public void onStart() {
-        Log.e(NEWS_LIST_TAG, "onStart");
+        Log.i(NEWS_LIST_TAG, "onStart");
         super.onStart();
     }
 

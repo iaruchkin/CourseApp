@@ -59,12 +59,12 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
     private void updateNews(@Nullable List<NewsEntity> news, String category) {
         if (news.size()==0){
             loadFromNet(category);
-            Log.e(NEWS_LIST_TAG, "there is no news in category : " + category);
+            Log.i(NEWS_LIST_TAG, "there is no news in category : " + category);
         }else {
             getViewState().showNews(news);
             getViewState().showState(State.HasData);
-            Log.e(NEWS_LIST_TAG, "loaded from DB: " + news.get(0).getCategory() + " / " + news.get(0).getTitle());
-            Log.e(NEWS_LIST_TAG, "updateNews executed on thread: " + Thread.currentThread().getName());
+            Log.i(NEWS_LIST_TAG, "loaded from DB: " + news.get(0).getCategory() + " / " + news.get(0).getTitle());
+            Log.i(NEWS_LIST_TAG, "updateNews executed on thread: " + Thread.currentThread().getName());
         }
     }
 
@@ -94,7 +94,7 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
                     .subscribe(
                             newsEntities -> {
                                 getViewState().showNews(newsEntities);
-                                Log.e(NEWS_LIST_TAG, "loaded from NET to DB: " + newsEntities.get(0).getCategory() + " / " + newsEntities.get(0).getTitle());
+                                Log.i(NEWS_LIST_TAG, "loaded from NET to DB: " + newsEntities.get(0).getCategory() + " / " + newsEntities.get(0).getTitle());
                             });
             disposeOnDestroy(saveNewsToDb);
             getViewState().showState(State.HasData);
@@ -103,7 +103,7 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
 
     private void handleError(Throwable th) {
         getViewState().showState(State.NetworkError);
-        Log.w(NEWS_LIST_TAG, th.getMessage(), th);
+        Log.e(NEWS_LIST_TAG, th.getMessage(), th);
         Log.e(NEWS_LIST_TAG, "handleError executed on thread: " + Thread.currentThread().getName());
     }
 }

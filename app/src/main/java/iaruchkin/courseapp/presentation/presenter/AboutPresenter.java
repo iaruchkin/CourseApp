@@ -21,13 +21,9 @@ import static iaruchkin.courseapp.ui.MainActivity.ABOUT_TAG;
 @InjectViewState
 public class AboutPresenter extends MvpPresenter<AboutView> {
 
-//    private Context context = App.INSTANCE.getApplicationContext();
-//    private Resources resources = App.INSTANCE.getResources();
-
     @Override
     protected void onFirstViewAttach() {
         super.onFirstViewAttach();
-//        getViewState().showState(State.Loading);
     }
 
     public void sendMessage(@NonNull final String message) {
@@ -37,31 +33,4 @@ public class AboutPresenter extends MvpPresenter<AboutView> {
     public void openLink(@NonNull final String url) {
         getViewState().openURL(url);
     }
-
-//    public void openLink(@NonNull final String url){
-//        Intent intent = new Intent()
-//                .setAction(Intent.ACTION_VIEW)
-//                .addCategory(Intent.CATEGORY_BROWSABLE)
-//                .setData(Uri.parse(url));
-//
-//        if (intent.resolveActivity(context.getPackageManager()) != null) {
-//            context.startActivity(intent);
-//        } else {
-//            Toast.makeText(context, resources.getString(R.string.error_no_browser), Toast.LENGTH_SHORT).show();
-//        }    }
-//
-//    public void sendMessage(@NonNull final String messageEmail) {
-//
-//        Log.i(ABOUT_TAG, "composeEmail");
-//
-//        Intent intent = new Intent(Intent.ACTION_SENDTO);
-//        intent.setData(Uri.parse(String.format("mailto:%s", resources.getString(R.string.email_adress)))); // only email apps should handle this
-//        intent.putExtra(Intent.EXTRA_SUBJECT,  resources.getString(R.string.subject));
-//        intent.putExtra(Intent.EXTRA_TEXT, messageEmail);
-//        if (intent.resolveActivity(context.getPackageManager()) != null) {
-//            context.startActivity(intent);
-//        } else {
-//            Toast.makeText(context, R.string.error_no_email_app, Toast.LENGTH_LONG).show();
-//        }
-//    }
 }
