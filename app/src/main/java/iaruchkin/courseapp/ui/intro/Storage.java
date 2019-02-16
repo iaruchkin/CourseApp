@@ -30,7 +30,7 @@ public class Storage{
         counter = !counter;
         storage.saveCounter(context);
 
-//        return counter;
-        return true;
+        return counter;
+//        return true;
     }
 }
