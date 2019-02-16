@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">AndroidAcademyApp</string>
     <string name="position1_res">Начинающий Android разработчик</string>
     <string name="name_res">Игорь Ручкин</string>
     <string name="position3_res">Инженер</string>
@@ -11,4 +10,14 @@
     <string name="message_hint">Введите сообщение…</string>
     <string name="about_res">Игорь занимается разработкой под Android с 2018 года. Сейчас проходит курс в Android Adcademy.Так же он делает небольшую игру на Unity.</string>
     <string name="menu_action_switch">Инфо</string>
+    <string name="action_retry">перезагрузить</string>
+    <string name="error_no_browser">Ошибка! Не найден браузер.</string>
+    <string name="error_message">Неудачная загрузка</string>
+    <string name="next">Далее</string>
+    <string name="skip">Пропустить</string>
+    <string name="start">Понятно</string>
+    <string name="intro_page1_title">Ищите новости!</string>
+    <string name="intro_page2_title">Читайте стаьи!</string>
+    <string name="intro_page3_title">Приятного использования!</string>
+    <string name="cancel_work">Отменить</string>
 </resources>

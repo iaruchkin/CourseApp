@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidAcademyApp</string>
+    <string name="app_name" translatable="false">NY Times</string>
     <string name="about_res">Igor has been doing android development since 2018. Now he learns Android at Android Academy. Also creating small game on Unity engine.</string>
     <string name="position1_res">Beginner Android Developer</string>
     <string name="name_res">Igor Ruchkin</string>
@@ -23,38 +23,38 @@
     <string name="error_message">Loading was unsuccsessful</string>
     <string name="action_retry">retry</string>
 
-    <string name="top_stories_category_home">Home</string>
-    <string name="top_stories_category_opinion">Opinion</string>
-    <string name="top_stories_category_world">World</string>
-    <string name="top_stories_category_national">National</string>
-    <string name="top_stories_category_politics">Politics</string>
-    <string name="top_stories_category_upshot">Upshot</string>
-    <string name="top_stories_category_nyregion">NY region</string>
-    <string name="top_stories_category_business">Business</string>
-    <string name="top_stories_category_technology">Technology</string>
-    <string name="top_stories_category_science">Science</string>
-    <string name="top_stories_category_health">Health</string>
-    <string name="top_stories_category_sports">Sports</string>
-    <string name="top_stories_category_arts">Arts</string>
-    <string name="top_stories_category_books">Books</string>
-    <string name="top_stories_category_movies">Movies</string>
-    <string name="top_stories_category_theater">Theater</string>
-    <string name="top_stories_category_sundayreview">Sunday review</string>
-    <string name="top_stories_category_fashion">Fashion</string>
-    <string name="top_stories_category_tmagazine">T-magazine</string>
-    <string name="top_stories_category_food">Food</string>
-    <string name="top_stories_category_travel">Travel</string>
-    <string name="top_stories_category_magazine">Magazine</string>
-    <string name="top_stories_category_realestate">Real estate</string>
-    <string name="top_stories_category_automobiles">Automobiles</string>
-    <string name="top_stories_category_obituaries">Obituaries</string>
-    <string name="top_stories_category_insider">Insider</string>
+    <string name="top_stories_category_home" translatable="false">Home</string>
+    <string name="top_stories_category_opinion" translatable="false">Opinion</string>
+    <string name="top_stories_category_world" translatable="false">World</string>
+    <string name="top_stories_category_national" translatable="false">National</string>
+    <string name="top_stories_category_politics" translatable="false">Politics</string>
+    <string name="top_stories_category_upshot" translatable="false">Upshot</string>
+    <string name="top_stories_category_nyregion" translatable="false">NY region</string>
+    <string name="top_stories_category_business" translatable="false">Business</string>
+    <string name="top_stories_category_technology" translatable="false">Technology</string>
+    <string name="top_stories_category_science" translatable="false">Science</string>
+    <string name="top_stories_category_health" translatable="false">Health</string>
+    <string name="top_stories_category_sports" translatable="false">Sports</string>
+    <string name="top_stories_category_arts" translatable="false">Arts</string>
+    <string name="top_stories_category_books" translatable="false">Books</string>
+    <string name="top_stories_category_movies" translatable="false">Movies</string>
+    <string name="top_stories_category_theater" translatable="false">Theater</string>
+    <string name="top_stories_category_sundayreview" translatable="false">Sunday review</string>
+    <string name="top_stories_category_fashion" translatable="false">Fashion</string>
+    <string name="top_stories_category_tmagazine" translatable="false">T-magazine</string>
+    <string name="top_stories_category_food" translatable="false">Food</string>
+    <string name="top_stories_category_travel" translatable="false">Travel</string>
+    <string name="top_stories_category_magazine" translatable="false">Magazine</string>
+    <string name="top_stories_category_realestate" translatable="false">Real estate</string>
+    <string name="top_stories_category_automobiles" translatable="false">Automobiles</string>
+    <string name="top_stories_category_obituaries" translatable="false">Obituaries</string>
+    <string name="top_stories_category_insider" translatable="false">Insider</string>
 
     <string name="next">NEXT</string>
     <string name="skip">SKIP</string>
     <string name="start">GOT IT</string>
     <string name="intro_page1_title">Browse news!</string>
-    <string name="intro_page2_title">Read them!</string>
+    <string name="intro_page2_title">Read articles!</string>
     <string name="intro_page3_title">Enjoy the app!</string>
 
     <string name="cancel_work">Cancel</string>
