@@ -27,22 +27,23 @@ import static iaruchkin.courseapp.ui.MainActivity.NEWS_LIST_TAG;
 @InjectViewState
 public class NewsListPresenter extends BasePresenter<NewsListView> {
     private Context context = App.INSTANCE.getApplicationContext();
-//    private Resources resources = App.INSTANCE.getResources();
     private NetworkSilngleton restApi;
-    private String category = "home";
+    private final String DEFAULT_CATEGORY = "home";
     public NewsListPresenter(@NonNull NetworkSilngleton instance) {
         this.restApi = instance;
     }
 
     @Override
     protected void onFirstViewAttach() {
-
+        loadFromDb(DEFAULT_CATEGORY);
     }
 
-
     public void loadNews(String category){
-        this.category = category;
         loadFromDb(category);
+    }
+
+    public void forceLoadNews(String category){
+        loadFromNet(category);
     }
 
     private void loadFromDb(String category){
@@ -51,11 +52,11 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
                 .loadNewsFromDb(context, category))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateNews, this::handleError);
+                .subscribe(news -> updateNews(news, category), this::handleError);
         disposeOnDestroy(loadFromDb);
     }
 
-    private void updateNews(@Nullable List<NewsEntity> news) {
+    private void updateNews(@Nullable List<NewsEntity> news, String category) {
         if (news.size()==0){
             loadFromNet(category);
             Log.e(NEWS_LIST_TAG, "there is no news in category : " + category);
@@ -74,11 +75,11 @@ public class NewsListPresenter extends BasePresenter<NewsListView> {
                 .get(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::updateDB, this::handleError);
+                .subscribe(response -> updateDB(response, category), this::handleError);
         disposeOnDestroy(disposable);
     }
 
-    private void updateDB(TopStoriesResponse response) {
+    private void updateDB(TopStoriesResponse response , String category) {
         if (response.getNews().size() == 0) {
             getViewState().showState(State.HasNoData);
         } else {

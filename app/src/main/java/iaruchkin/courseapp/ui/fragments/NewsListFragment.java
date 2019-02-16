@@ -159,78 +159,12 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsItemAd
 
     private void setupUx() {
 
-        mUpdate.setOnClickListener(v -> loadNews(getNewsCategory()));//force update
-
+        mUpdate.setOnClickListener(v -> forceLoadNews(getNewsCategory()));
         errorAction.setOnClickListener(v -> loadNews(getNewsCategory()));
-
         categoriesAdapter.setOnCategorySelectedListener(category -> {
             loadNews(getNewsCategory());
         }, spinnerCategories);
     }
-
-//    private void loadFromDb(String category){
-//        showState(State.Loading);
-//        Disposable loadFromDb = Single.fromCallable(() -> ConverterNews
-//                .loadNewsFromDb(getContext(), category))
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(this::updateNews, this::handleError);
-//        compositeDisposable.add(loadFromDb);
-//    }
-//
-//    private void updateNews(@Nullable List<NewsEntity> news) {
-//        if (news.size()==0){
-//            loadFromNet(getNewsCategory());
-//            Log.e(NEWS_LIST_TAG, "there is no news in category : " + getNewsCategory());
-//        }else {
-//            if (mAdapter != null) {
-//                mAdapter.replaceItems(news);
-//            }
-//            showState(State.HasData);
-//            Log.e(NEWS_LIST_TAG, "loaded from DB: " + news.get(0).getCategory() + " / " + news.get(0).getTitle());
-//            Log.e(NEWS_LIST_TAG, "updateNews executed on thread: " + Thread.currentThread().getName());
-//        }
-//    }
-//
-//    private void loadFromNet(@NonNull String category){
-//        showState(State.Loading);
-//        final Disposable disposable = NetworkSilngleton.getInstance()
-//                .topStories()
-//                .get(category)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribe(this::updateDB, this::handleError);
-//        compositeDisposable.add(disposable);
-//    }
-//
-//    public void updateDB(TopStoriesResponse response) {
-//        if (response.getNews().size() == 0) {
-//            showState(State.HasNoData);
-//        } else {
-//            Disposable saveNewsToDb = Single.fromCallable(response::getNews)
-//                    .subscribeOn(Schedulers.io())
-//                    .map(newsDTO -> {
-//                        ConverterNews.saveAllNewsToDb(getContext(), ConverterNews
-//                                .dtoToDao(newsDTO, getNewsCategory()),getNewsCategory());
-//                        return ConverterNews.loadNewsFromDb(getContext(), getNewsCategory());
-//                    })
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(
-//                            newsEntities -> {
-//                                mAdapter.replaceItems(newsEntities);
-//                                Log.e(NEWS_LIST_TAG, "loaded from NET to DB: " + newsEntities.get(0).getCategory() + " / " + newsEntities.get(0).getTitle());
-//                            });
-//            compositeDisposable.add(saveNewsToDb);
-//            showState(State.HasData);
-//        }
-//    }
-//
-//    private void handleError(Throwable th) {
-//        showState(State.NetworkError);
-//        Log.w(NEWS_LIST_TAG, th.getMessage(), th);
-//        Log.e(NEWS_LIST_TAG, "handleError executed on thread: " + Thread.currentThread().getName());
-//    }
-//
 
     private String getNewsCategory() {
         return categoriesAdapter.getSelectedCategory().serverValue();
@@ -260,6 +194,12 @@ public class NewsListFragment extends MvpAppCompatFragment implements NewsItemAd
     public void loadNews(String category) {
 
         newsListPresenter.loadNews(category);
+
+    }
+
+    public void forceLoadNews(String category) {
+
+        newsListPresenter.forceLoadNews(category);
 
     }
 
