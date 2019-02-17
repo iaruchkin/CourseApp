@@ -23,7 +23,7 @@
 
     <android.support.v7.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context=".ui.fragments.AboutFragment">
 
@@ -195,12 +195,12 @@
                 android:focusable="true"/>
 
             <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/vk_link"
+                android:id="@+id/fb_link"
                 android:padding="@dimen/standart_padding"
                 android:layout_width="@dimen/icon_link_dim"
                 android:layout_height="@dimen/icon_link_dim"
                 android:scaleType="centerCrop"
-                android:src="@drawable/vk_logo"
+                android:src="@drawable/facebook_logo"
                 android:contentDescription="@string/work_icon_dscr"
                 android:clickable="true"
                 android:focusable="true"/>

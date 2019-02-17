@@ -33,7 +33,7 @@ public class AboutFragment extends MvpAppCompatFragment implements AboutView {
     private TextView mSendButton;
     private ImageView mTelegramLogo;
     private ImageView mInsagramLogo;
-    private ImageView mVkLogo;
+    private ImageView mFbLogo;
     private MessageFragmentListener listener;
 
     @InjectPresenter
@@ -104,15 +104,15 @@ public class AboutFragment extends MvpAppCompatFragment implements AboutView {
         mSendButton.setOnClickListener(v -> presenter.sendMessage(mMessageEditText.getText().toString()));
         mTelegramLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.telegram_link)));
         mInsagramLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.instagram_link)));
-        mVkLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.vk_link)));
+        mFbLogo.setOnClickListener(v -> presenter.openLink(getString(R.string.fb_link)));
     }
 
     private void setActionBar(View view) {
         setHasOptionsMenu(true);
         ((AppCompatActivity) getContext()).setSupportActionBar(view.findViewById(R.id.toolbar));
         ActionBar actionBar = ((AppCompatActivity) getContext()).getSupportActionBar();
-        actionBar.setTitle(getString(R.string.name_res));
         if (actionBar != null) {
+            actionBar.setTitle(getString(R.string.name_res));
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
@@ -123,7 +123,7 @@ public class AboutFragment extends MvpAppCompatFragment implements AboutView {
         mSendButton = view.findViewById(R.id.b_send);
         mTelegramLogo = view.findViewById(R.id.telegram_link);
         mInsagramLogo = view.findViewById(R.id.instagram_link);
-        mVkLogo = view.findViewById(R.id.vk_link);
+        mFbLogo = view.findViewById(R.id.fb_link);
     }
 
 }
