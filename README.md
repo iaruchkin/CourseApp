@@ -15,4 +15,11 @@ New York Times
 
 `В проекте использовались: RXJava, Glide, Retrofit + OKHttp, Room, Moxy`
 
+## Screenshots
+<div>
+<img  src="https://media.giphy.com/media/5ts9oyZv9kAhz3qn1X/giphy.gif" width="30%" >
+  <img width="5%" >
+<img  src="https://media.giphy.com/media/5UwMD4eyRRk2j9JP1K/giphy.gif" width="30%" >
+</div>
+
 [Скачать приложение с Google Drive](https://drive.google.com/open?id=16r-5_hEawwhn32p28bDjlW5t0l1SuORj)
