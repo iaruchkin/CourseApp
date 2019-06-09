@@ -65,7 +65,10 @@ dependencies {
 
     //circle indicator
     implementation 'me.relex:circleindicator:1.2.2'
+
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    kapt "android.arch.persistence.room:compiler:$versionRoom"
 
 }
 repositories {

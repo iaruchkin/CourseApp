@@ -29,6 +29,7 @@ import iaruchkin.courseapp.room.NewsEntity
 import iaruchkin.courseapp.ui.adapter.CategoriesSpinnerAdapter
 import iaruchkin.courseapp.ui.adapter.NewsItemAdapter
 import iaruchkin.courseapp.R
+import iaruchkin.courseapp.network.NewsDTO
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -38,6 +39,8 @@ import io.reactivex.schedulers.Schedulers
 import iaruchkin.courseapp.ui.MainActivity.Companion.ABOUT_TAG
 import iaruchkin.courseapp.ui.MainActivity.Companion.NEWS_DETAILS_TAG
 import iaruchkin.courseapp.ui.MainActivity.Companion.NEWS_LIST_TAG
+import io.reactivex.functions.Consumer
+import java.util.concurrent.Callable
 
 
 class NewsListFragment : Fragment(), NewsItemAdapter.NewsAdapterOnClickHandler {
@@ -156,7 +159,7 @@ class NewsListFragment : Fragment(), NewsItemAdapter.NewsAdapterOnClickHandler {
         }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(Consumer<List<NewsEntity>> { this.updateNews(it) }, Consumer<Throwable> { this.handleError(it) })
+                .subscribe({ this.updateNews(it) }, { this.handleError(it) })
         compositeDisposable.add(loadFromDb)
     }
 
@@ -182,31 +185,31 @@ class NewsListFragment : Fragment(), NewsItemAdapter.NewsAdapterOnClickHandler {
                 .get(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(Consumer<TopStoriesResponse> { this.updateDB(it) }, Consumer<Throwable> { this.handleError(it) })
+                .subscribe({ this.updateDB(it) }, { this.handleError(it) })
         compositeDisposable.add(disposable)
     }
 
-//    fun updateDB(response: TopStoriesResponse) {
-//        if (response.news.size == 0) {
-//            mError!!.visibility = View.VISIBLE
-//            mLoadingIndicator!!.visibility = View.GONE
-//        } else {
-//            val saveNewsToDb = Single.fromCallable<List<NewsDTO>>(Callable<List<NewsDTO>> { response.news })
-//                    .subscribeOn(Schedulers.io())
-//                    .map { newsDTO ->
-//                        ConverterNews.saveAllNewsToDb(context, ConverterNews
-//                                .dtoToDao(newsDTO, newsCategory), newsCategory)
-//                        ConverterNews.loadNewsFromDb(context, newsCategory)
-//                    }
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe { newsEntities ->
-//                        mAdapter!!.replaceItems(newsEntities)
-//                        Log.e(NEWS_LIST_TAG, "loaded from NET to DB: " + newsEntities[0].category + " / " + newsEntities[0].title)
-//                    }
-//            compositeDisposable.add(saveNewsToDb)
-//            mLoadingIndicator!!.visibility = View.GONE
-//        }
-//    }
+    fun updateDB(response: TopStoriesResponse) {
+        if (response.news.size == 0) {
+            mError!!.visibility = View.VISIBLE
+            mLoadingIndicator!!.visibility = View.GONE
+        } else {
+            val saveNewsToDb = Single.fromCallable<List<NewsDTO>> { response.news }
+                    .subscribeOn(Schedulers.io())
+                    .map { newsDTO ->
+                        ConverterNews.saveAllNewsToDb(context, ConverterNews
+                                .dtoToDao(newsDTO, newsCategory), newsCategory)
+                        ConverterNews.loadNewsFromDb(context, newsCategory)
+                    }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { newsEntities ->
+                        mAdapter!!.replaceItems(newsEntities)
+                        Log.e(NEWS_LIST_TAG, "loaded from NET to DB: " + newsEntities[0].category + " / " + newsEntities[0].title)
+                    }
+            compositeDisposable.add(saveNewsToDb)
+            mLoadingIndicator!!.visibility = View.GONE
+        }
+    }
 
     private fun handleError(th: Throwable) {
         Log.w(NEWS_LIST_TAG, th.message, th)

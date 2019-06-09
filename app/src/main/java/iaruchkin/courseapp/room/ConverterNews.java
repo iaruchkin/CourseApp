@@ -36,18 +36,18 @@ public class ConverterNews {
     }
 
     public static NewsEntity getNewsById(Context context, String id){
-        AppDatabase db = AppDatabase.getAppDatabase(context);
+        AppDatabase db = AppDatabase.Companion.getAppDatabase(context);
         return db.newsDao().getNewsById(id);
     }
 
     public static List<NewsEntity> loadNewsFromDb(Context context, String category) {
-        AppDatabase db = AppDatabase.getAppDatabase(context);
+        AppDatabase db = AppDatabase.Companion.getAppDatabase(context);
         Log.e(TAG, "data loaded from DB");
         return db.newsDao().getAll(category);
     }
 
     public static void saveAllNewsToDb(Context context, List<NewsEntity> list, String category){
-        AppDatabase db = AppDatabase.getAppDatabase(context);
+        AppDatabase db = AppDatabase.Companion.getAppDatabase(context);
         db.newsDao().deleteAll(category);
         Log.e(TAG, "DB: deleteAll");
 
@@ -61,12 +61,12 @@ public class ConverterNews {
     }
 
     public static void editNewsToDb(Context context, NewsEntity newsEntity){
-        AppDatabase db = AppDatabase.getAppDatabase(context);
+        AppDatabase db = AppDatabase.Companion.getAppDatabase(context);
         db.newsDao().edit(newsEntity);
     }
 
     public static void deleteNewsFromDb(Context context, NewsEntity newsEntity){
-        AppDatabase db = AppDatabase.getAppDatabase(context);
+        AppDatabase db = AppDatabase.Companion.getAppDatabase(context);
         db.newsDao().delete(newsEntity);
     }
 }

@@ -1,13 +1,13 @@
-package iaruchkin.courseapp.data;
+package iaruchkin.courseapp.data
 
-import android.support.annotation.NonNull;
-import android.support.annotation.StringRes;
+import android.support.annotation.StringRes
 
-import java.util.Arrays;
+import java.util.Arrays
 
-import iaruchkin.courseapp.R;
+import iaruchkin.courseapp.R
 
-public enum NewsCategory {
+enum class NewsCategory private constructor(internal val serverValue: String,
+                                            @param:StringRes internal val displayResId: Int) {
 
     HOME("home", R.string.top_stories_category_home),
     OPINION("opinion", R.string.top_stories_category_opinion),
@@ -34,34 +34,27 @@ public enum NewsCategory {
     OBITUARIES("obituaries", R.string.top_stories_category_obituaries),
     INSIDER("insider", R.string.top_stories_category_insider);
 
-    final String serverValue;
-    final int displayResId;
-
-    NewsCategory(@NonNull String serverValue,
-                 @StringRes int displayResId) {
-        this.displayResId = displayResId;
-        this.serverValue = serverValue;
-    }
-
     @StringRes
-    public int displayValue(){
-        return displayResId;
+    fun displayValue(): Int {
+        return displayResId
     }
 
-    @NonNull
-    public String serverValue(){
-        return serverValue;
+    fun serverValue(): String {
+        return serverValue
     }
 
-    public static String[] names() {
-        NewsCategory[] states = values();
-        String[] names = new String[states.length];
+    companion object {
 
-        for (int i = 0; i < states.length; i++) {
-            names[i] = states[i].name();
+        fun names(): Array<String?> {
+            val states = values()
+            val names = arrayOfNulls<String>(states.size)
+
+            for (i in states.indices) {
+                names[i] = states[i].name
+            }
+
+            return names
         }
-
-        return names;
     }
 
 }

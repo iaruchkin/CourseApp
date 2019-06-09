@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), MessageFragmentListener {
                 .commit()
     }
 
-    private fun startNewsDetails(message: String) {
+    private fun startNewsDetails(message: String?) {
         mNewsDetailsFragment = NewsDetailsFragment.newInstance(message)
         supportFragmentManager
                 .beginTransaction()
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity(), MessageFragmentListener {
         mFragmentManager = supportFragmentManager
     }
 
-    override fun onActionClicked(fragmentTag: String, message: String) {
+    override fun onActionClicked(fragmentTag: String, message: String?) {
         when (fragmentTag) {
             NEWS_LIST_TAG -> startNewsList()
             NEWS_DETAILS_TAG -> startNewsDetails(message)
