@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidAcademyApp</string>
+    <string name="app_name" translatable="false">AndroidAcademyApp</string>
     <string name="about_res">Igor has been doing android development since 2018. Now he learns Android at Android Academy. Also creating small game on Unity engine.</string>
     <string name="position1_res">Beginner Android Developer</string>
     <string name="name_res">Igor Ruchkin</string>
