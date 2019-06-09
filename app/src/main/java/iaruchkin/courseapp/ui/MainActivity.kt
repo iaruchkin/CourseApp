@@ -3,6 +3,8 @@ package iaruchkin.courseapp.ui
 import android.os.Bundle
 import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
+import com.iaruchkin.library.ModuleFragment
+import com.iaruchkin.library.ModuleWebFragment
 
 import iaruchkin.courseapp.R
 import iaruchkin.courseapp.ui.intro.IntroFragment
@@ -15,6 +17,11 @@ class MainActivity : AppCompatActivity(), MessageFragmentListener {
     private var mIntroFragment: IntroFragment? = null
     private var mAboutFragment: AboutFragment? = null
     private var mNewsDetailsFragment: NewsDetailsFragment? = null
+
+    private var simpleFragment: SimpleFragment? = null
+    private var moduleFragment: ModuleFragment? = null
+    private var moduleWebFragment: ModuleWebFragment? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,6 +71,33 @@ class MainActivity : AppCompatActivity(), MessageFragmentListener {
                 .commit()
     }
 
+    private fun startSimple() {
+        simpleFragment = SimpleFragment()
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.frame_list, simpleFragment!!)
+                .addToBackStack(null)
+                .commit()
+    }
+
+    private fun startModule() {
+        moduleFragment = ModuleFragment()
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.frame_list, moduleFragment!!)
+                .addToBackStack(null)
+                .commit()
+    }
+
+    private fun startWebModule(message: String?) {
+        moduleWebFragment = ModuleWebFragment.newInstance(message)
+        supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.frame_list, moduleWebFragment!!)
+                .addToBackStack(null)
+                .commit()
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
@@ -77,11 +111,11 @@ class MainActivity : AppCompatActivity(), MessageFragmentListener {
     override fun onActionClicked(fragmentTag: String, message: String?) {
         when (fragmentTag) {
             NEWS_LIST_TAG -> startNewsList()
-            NEWS_DETAILS_TAG -> startNewsDetails(message)
-            ABOUT_TAG -> startAbout()
+//            NEWS_DETAILS_TAG -> startNewsDetails(message)
+            NEWS_DETAILS_TAG -> startWebModule("https://pp.userapi.com/j13hlvr6wCPh864xEtkUVDR-bzwKVccM98PphA/jxf9SMH30jY.jpg")
+            ABOUT_TAG -> startModule()
             INTRO_TAG -> startIntro()
         }
-
     }
 
     companion object {

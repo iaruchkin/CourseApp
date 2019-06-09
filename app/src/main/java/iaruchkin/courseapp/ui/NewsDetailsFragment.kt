@@ -59,7 +59,7 @@ class NewsDetailsFragment : Fragment() {
         val TAG = NewsDetailsFragment::class.java.simpleName
 
 
-        fun newInstance(itemURL: String): NewsDetailsFragment {
+        fun newInstance(itemURL: String?): NewsDetailsFragment {
             val fragmentFullNews = NewsDetailsFragment()
             val bundle = Bundle()
             bundle.putSerializable(EXTRA_ITEM_URL, itemURL)

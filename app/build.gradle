@@ -70,6 +70,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     kapt "android.arch.persistence.room:compiler:$versionRoom"
 
+    implementation project(":library")
+
 }
 repositories {
     mavenCentral()

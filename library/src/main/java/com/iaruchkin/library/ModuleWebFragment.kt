@@ -1,4 +1,4 @@
-package iaruchkin.courseapp.ui
+package com.iaruchkin.library
 
 import android.content.Context
 import android.support.v4.app.Fragment
@@ -9,40 +9,37 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 
-import iaruchkin.courseapp.R
-import io.reactivex.disposables.CompositeDisposable
-
-class moduleFragment : Fragment() {
-    private val compositeDisposable = CompositeDisposable()
-    private var listener: MessageFragmentListener? = null
+class ModuleWebFragment : Fragment() {
+//    private val compositeDisposable = CompositeDisposable()
+//    private var listener: MessageFragmentListener? = null
 
     internal var mWebView: WebView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.activity_news_details_webview, container, false)
+        val view = inflater.inflate(R.layout.module_web_fragment, container, false)
         mWebView = view.findViewById(R.id.web_view)
         setView(arguments!!.getString(EXTRA_ITEM_URL))
 
         return view
     }
 
-    override fun onStop() {
-        super.onStop()
-        compositeDisposable.clear()
-    }
+//    override fun onStop() {
+//        super.onStop()
+//        compositeDisposable.clear()
+//    }
 
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-        if (context is MessageFragmentListener) {
-            listener = context
-        }
-    }
-
-    override fun onDetach() {
-        listener = null
-        super.onDetach()
-    }
+//    override fun onAttach(context: Context?) {
+//        super.onAttach(context)
+//        if (context is MessageFragmentListener) {
+//            listener = context
+//        }
+//    }
+//
+//    override fun onDetach() {
+//        listener = null
+//        super.onDetach()
+//    }
 
     private fun setView(itemURL: String?) {
         if (itemURL != null) {
@@ -56,11 +53,11 @@ class moduleFragment : Fragment() {
 
     companion object {
         internal val EXTRA_ITEM_URL = "extra:itemURL"
-        val TAG = moduleFragment::class.java.simpleName
+        val TAG = ModuleWebFragment::class.java.simpleName
 
 
-        fun newInstance(itemURL: String): moduleFragment {
-            val fragmentFullNews = moduleFragment()
+        fun newInstance(itemURL: String?): ModuleWebFragment {
+            val fragmentFullNews = ModuleWebFragment()
             val bundle = Bundle()
             bundle.putSerializable(EXTRA_ITEM_URL, itemURL)
             fragmentFullNews.arguments = bundle
