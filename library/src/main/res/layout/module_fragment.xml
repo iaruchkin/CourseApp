@@ -9,9 +9,21 @@
     <TextView
         android:id="@+id/item_text"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:padding="10dp"
         android:text="hello from module"
         android:gravity="center"/>
+
+    <Button
+        android:id="@+id/btn_load_json"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="load_json" />
+
+    <Button
+        android:id="@+id/btn_parse_json"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="parse_json" />
 
 </LinearLayout>
