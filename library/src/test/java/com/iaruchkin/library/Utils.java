@@ -1,15 +1,14 @@
 package com.iaruchkin.library;
 
-import android.content.Context;
-
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public class Utils {
 
-    public static String loadJsonFromAsset(Context context, String fileName) {
+    public static String loadJson(String fileName) {
         try {
-            InputStream inputStream = context.getAssets().open(fileName);
+            InputStream inputStream = new FileInputStream(fileName);
             int size = inputStream.available();
             byte[] buffer = new byte[size];
             inputStream.read(buffer);

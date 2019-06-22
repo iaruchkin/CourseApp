@@ -9,10 +9,14 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.Gson
-import com.iaruchkin.library.exampleDTOs.Employee
+import android.widget.CheckBox
+import android.widget.LinearLayout
+import com.iaruchkin.library.exampleDTOs.Example
+import com.iaruchkin.library.exampleDTOs.PersonalDetails
 
 
 class ModuleFragment : Fragment(), View.OnClickListener {
+    var linearLayout: LinearLayout? = null
 
     private var mTextResult: TextView? = null
     private var mJsonString: String? = null
@@ -40,21 +44,21 @@ class ModuleFragment : Fragment(), View.OnClickListener {
     private fun parseJson() {
         if (mJsonString != null) {
             val gson = Gson()
-            val employee = gson.fromJson<Any>(mJsonString, Employee::class.java) as Employee
-            val personalDetails = employee.PersonalDetails
+            val employee = gson.fromJson<Any>(mJsonString, Example::class.java) as Example
+//            val personalDetails = employee.personalDetails?.personalDetails
 
-            val resultBuilder = StringBuilder()
-            resultBuilder.append("Employee Details:")
-            resultBuilder.append("\n")
-            resultBuilder.append("Id: " + employee.Id)
-            resultBuilder.append("\n")
-            resultBuilder.append("Name: " + personalDetails.name)
-            resultBuilder.append("\n")
-            resultBuilder.append("Age: " + personalDetails.age)
-            resultBuilder.append("\n")
-            resultBuilder.append("blood Group: " + personalDetails.bloodGroup)
-
-            mTextResult!!.text = resultBuilder.toString()
+//            val resultBuilder = StringBuilder()
+//            resultBuilder.append("Employee Details:")
+//            resultBuilder.append("\n")
+//            resultBuilder.append("Id: " + employee.id)
+//            resultBuilder.append("\n")
+//            resultBuilder.append("Name: " + personalDetails?.get("name"))
+//            resultBuilder.append("\n")
+//            resultBuilder.append("Age: " + personalDetails?.get("age"))
+//            resultBuilder.append("\n")
+//            resultBuilder.append("blood Group: " + personalDetails?.get("bloodGroup"))
+//
+//            mTextResult!!.text = resultBuilder.toString()
 
         } else {
             Toast.makeText(context, "Please load JSON", Toast.LENGTH_SHORT).show()
@@ -69,12 +73,32 @@ class ModuleFragment : Fragment(), View.OnClickListener {
         }
     }
 
+    private fun addCheckBoxes(v: View) {
+
+        val layout = v.findViewById(R.id.linear_layout) as LinearLayout
+        val checkBoxLayout = LinearLayout(context)
+        checkBoxLayout.orientation = LinearLayout.VERTICAL
+
+        layout.addView(checkBoxLayout)
+
+        for (i in 1..3) {
+            val checkBox = CheckBox(context)
+            checkBox.text = "CheckBox $i"
+            checkBoxLayout.addView(checkBox)
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.module_fragment, container, false)
+//        linearLayout = view?.findViewById(R.id.linear_layout)
+//        val layout = view.findViewById(R.id.linear_layout) as LinearLayout
+
         mTextResult = view.findViewById<View>(R.id.item_text) as TextView
         view.findViewById<View>(R.id.btn_load_json).setOnClickListener(this)
         view.findViewById<View>(R.id.btn_parse_json).setOnClickListener(this)
+
+        addCheckBoxes(view)
 
         return view
     }
