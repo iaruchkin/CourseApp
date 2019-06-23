@@ -12,7 +12,6 @@ import com.google.gson.Gson
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import com.iaruchkin.library.exampleDTOs.Example
-import com.iaruchkin.library.exampleDTOs.PersonalDetails
 
 
 class ModuleFragment : Fragment(), View.OnClickListener {
@@ -45,18 +44,18 @@ class ModuleFragment : Fragment(), View.OnClickListener {
         if (mJsonString != null) {
             val gson = Gson()
             val employee = gson.fromJson<Any>(mJsonString, Example::class.java) as Example
-//            val personalDetails = employee.personalDetails?.personalDetails
+//            val mapData = employee.mapData?.mapData
 
 //            val resultBuilder = StringBuilder()
 //            resultBuilder.append("Employee Details:")
 //            resultBuilder.append("\n")
 //            resultBuilder.append("Id: " + employee.id)
 //            resultBuilder.append("\n")
-//            resultBuilder.append("Name: " + personalDetails?.get("name"))
+//            resultBuilder.append("Name: " + mapData?.get("name"))
 //            resultBuilder.append("\n")
-//            resultBuilder.append("Age: " + personalDetails?.get("age"))
+//            resultBuilder.append("Age: " + mapData?.get("age"))
 //            resultBuilder.append("\n")
-//            resultBuilder.append("blood Group: " + personalDetails?.get("bloodGroup"))
+//            resultBuilder.append("blood Group: " + mapData?.get("bloodGroup"))
 //
 //            mTextResult!!.text = resultBuilder.toString()
 

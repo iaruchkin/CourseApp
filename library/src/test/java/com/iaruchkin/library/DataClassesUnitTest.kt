@@ -1,28 +1,25 @@
 package com.iaruchkin.library
 
-import com.iaruchkin.library.exampleDTOs.MapData
-import com.iaruchkin.library.exampleDTOs.Example
-import com.iaruchkin.library.exampleDTOs.Select
+import com.iaruchkin.library.DataClasses.ExampleDataClass
+import com.iaruchkin.library.DataClasses.Select
 import org.junit.Before
 import org.junit.Test
 
 import org.junit.Assert.*
 
-class ExampleUnitTest {
-    lateinit var state: Example
-    lateinit var mapData: MapData
+class DataClassesUnitTest {
+    lateinit var state: ExampleDataClass
     lateinit var list: List<Select>
 
     @Before
     fun init(){
         val json: String = Utils.loadJson("./src/test/java/com/iaruchkin/library/example.json")
 
-        state = Example(json)
-        mapData = MapData(state)
-        list = mapData.ctxList
+        state = ExampleDataClass.getState(json)
+        list = ExampleDataClass.getCtxList(state)
 
         print((state.address))
-        println((state.mapData?.get("type_list")))
+        println((state.ctxData?.get("type_list")))
     }
 
     @Test
@@ -32,22 +29,23 @@ class ExampleUnitTest {
 
     @Test
     fun name_isCorrect() {
-        assertEquals("Employee1", state.mapData?.get("name").toString())
+        assertEquals("Employee1", state.ctxData?.get("name").toString())
     }
 
     @Test
     fun age_isCorrect() {
-        assertEquals(30.0, state.mapData?.get("age"))
+        assertEquals(30.0, state.ctxData?.get("age"))
     }
 
     @Test
     fun bloodGroup_isCorrect() {
-        assertEquals("B+", state.mapData?.get("bloodGroup"))
+        assertEquals("B+", state.ctxData?.get("bloodGroup"))
     }
 
     @Test
     fun list_isCorrect() {
         assertEquals("323", (list.get(0).value))
         assertEquals(3, (list.size))
+
     }
 }

@@ -1,10 +1,12 @@
 {
   "Id": 11111,
   "address": "type_list",
+  "address2": "type_list",
   "MapData": {
     "name": "Employee1",
     "age": 30,
     "bloodGroup": "B+",
+    "address": "address",
     "type_list": [
       {
         "caption": "worker",
@@ -16,6 +18,20 @@
       },
       {
         "caption": "driver",
+        "value": "455"
+      }
+    ],
+    "type_list2": [
+      {
+        "caption": "worker2",
+        "value": "323"
+      },
+      {
+        "caption": "engineer2",
+        "value": "100"
+      },
+      {
+        "caption": "driver2",
         "value": "455"
       }
     ]
