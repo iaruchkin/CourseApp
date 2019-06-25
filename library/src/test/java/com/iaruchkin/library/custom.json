@@ -1,0 +1,11 @@
+{
+  "year": 116,
+  "month": 5,
+  "day": 21,
+  "age": 26,
+  "email": "norman@futurestud.io",
+  "isDeveloper": true,
+  "name": "Norman",
+  "check": 1,
+  "enum": "M"
+}
