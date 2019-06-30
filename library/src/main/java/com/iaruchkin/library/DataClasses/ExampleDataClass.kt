@@ -17,10 +17,6 @@ data class ExampleDataClass(
                         return Gson().fromJson(json, ExampleDataClass::class.java)
                 }
 
-                fun getCtxList(dynamic: String?): List<Select> {
-                        return Gson().fromJson(dynamic, object : TypeToken<List<Select>>() {}.type)
-                }
-
                 fun getCtxList(state: ExampleDataClass?): List<Select> {
                         return Gson().fromJson(state?.ctxData?.get(state?.address).toString(), object : TypeToken<List<Select>>() {}.type)
                 }

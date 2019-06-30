@@ -1,12 +1,11 @@
 package com.iaruchkin.library
 
-import com.iaruchkin.library.exampleDTOs.MapData
 import com.iaruchkin.library.exampleDTOs.Example
+import com.iaruchkin.library.exampleDTOs.MapData
 import com.iaruchkin.library.exampleDTOs.Select
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class ExampleUnitTest {
     lateinit var state: Example
@@ -19,10 +18,9 @@ class ExampleUnitTest {
 
         state = Example(json)
         mapData = MapData(state)
-        list = mapData.ctxList
+        list = mapData.ctxList!!
 
-        print((state.address))
-        println((state.mapData?.get("type_list")))
+//        print((state.address))
     }
 
     @Test
@@ -47,7 +45,15 @@ class ExampleUnitTest {
 
     @Test
     fun list_isCorrect() {
+        println((state.mapData?.get("type_list")))
+
         assertEquals("323", (list.get(0).value))
         assertEquals(3, (list.size))
     }
+
+    @Test
+    fun mapping_isCorrect() {
+        println((state.mapData?.get("type_list")))
+    }
+
 }

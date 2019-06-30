@@ -7,6 +7,6 @@ class MapData (state: Example){
 
     private var ctxMap: Map<String, Any>? = state.mapData
 
-    val ctxList: List<Select> = Gson().fromJson(ctxMap?.get(state?.address).toString(), object : TypeToken<List<Select>>() {}.type)
+    val ctxList: List<Select>? = Gson().fromJson(ctxMap?.get(state?.address).toString(), object : TypeToken<List<Select>>() {}.type)
 
 }
