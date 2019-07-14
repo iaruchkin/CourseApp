@@ -30,7 +30,8 @@ class MainActivity : AppCompatActivity(), MessageFragmentListener {
 
         if (savedInstanceState == null) {
             if (Storage.needToShowIntro(this)) {
-                startIntro()
+                startModule()
+//                startIntro()
             } else {
                 startNewsList()
             }
@@ -114,7 +115,7 @@ class MainActivity : AppCompatActivity(), MessageFragmentListener {
 //            NEWS_DETAILS_TAG -> startNewsDetails(message)
             NEWS_DETAILS_TAG -> startWebModule("https://pp.userapi.com/j13hlvr6wCPh864xEtkUVDR-bzwKVccM98PphA/jxf9SMH30jY.jpg")
             ABOUT_TAG -> startModule()
-            INTRO_TAG -> startIntro()
+            INTRO_TAG -> startModule()//startIntro()
         }
     }
 

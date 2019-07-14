@@ -11,7 +11,7 @@ import com.iaruchkin.library.DataClasses.ExampleDataClass
 
 
 class ModuleFragment : Fragment() {
-    
+
     private var mTextResult: TextView? = null
     private var mJsonString: String? = null
     private val JSON_FILE_NAME = "example.json"
