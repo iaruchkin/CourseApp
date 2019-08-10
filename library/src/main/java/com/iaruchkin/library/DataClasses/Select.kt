@@ -25,6 +25,5 @@ data class Select(
                 val checkBox = CheckBox(context)
                 checkBox.text = "CheckBox $caption"
                 checkBoxLayout.addView(checkBox)
-
         }
 }

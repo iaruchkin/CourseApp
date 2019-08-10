@@ -2,45 +2,35 @@ package iaruchkin.courseapp.ui
 
 import android.content.Context
 import android.content.res.Configuration
+import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
 import android.support.v4.app.Fragment
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.Toolbar
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.View
-import android.view.ViewGroup
+import android.support.v7.widget.Toolbar
+import android.util.Log
+import android.view.*
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.Spinner
-
+import iaruchkin.courseapp.R
 import iaruchkin.courseapp.data.NewsCategory
 import iaruchkin.courseapp.network.NetworkSilngleton
+import iaruchkin.courseapp.network.NewsDTO
 import iaruchkin.courseapp.network.TopStoriesResponse
 import iaruchkin.courseapp.room.ConverterNews
 import iaruchkin.courseapp.room.NewsEntity
-import iaruchkin.courseapp.ui.adapter.CategoriesSpinnerAdapter
-import iaruchkin.courseapp.ui.adapter.NewsItemAdapter
-import iaruchkin.courseapp.R
-import iaruchkin.courseapp.network.NewsDTO
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
-
 import iaruchkin.courseapp.ui.MainActivity.Companion.ABOUT_TAG
 import iaruchkin.courseapp.ui.MainActivity.Companion.NEWS_DETAILS_TAG
 import iaruchkin.courseapp.ui.MainActivity.Companion.NEWS_LIST_TAG
-import io.reactivex.functions.Consumer
-import java.util.concurrent.Callable
+import iaruchkin.courseapp.ui.adapter.CategoriesSpinnerAdapter
+import iaruchkin.courseapp.ui.adapter.NewsItemAdapter
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.schedulers.Schedulers
 
 
 class NewsListFragment : Fragment(), NewsItemAdapter.NewsAdapterOnClickHandler {
@@ -185,7 +175,11 @@ class NewsListFragment : Fragment(), NewsItemAdapter.NewsAdapterOnClickHandler {
                 .get(category)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ this.updateDB(it) }, { this.handleError(it) })
+                .subscribe(
+                        { Log.e("JSON 2 ", it) },
+                        { Log.e("JSON 2 ", "error") }
+                )
+//                .subscribe({ this.updateDB(it) }, { this.handleError(it) })
         compositeDisposable.add(disposable)
     }
 

@@ -30,8 +30,8 @@ class MainActivity : AppCompatActivity(), MessageFragmentListener {
 
         if (savedInstanceState == null) {
             if (Storage.needToShowIntro(this)) {
-                startModule()
-//                startIntro()
+//                startModule()
+                startIntro()
             } else {
                 startNewsList()
             }

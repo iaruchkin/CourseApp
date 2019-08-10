@@ -45,6 +45,7 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava2:$versionRetrofit"
     implementation "com.squareup.okhttp3:logging-interceptor:$versionOkHttpLogingInterceptor"
     implementation "com.github.bumptech.glide:glide:$versionGlide"
+    implementation 'com.squareup.retrofit2:converter-scalars:2.1.0'
 
     //other
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
